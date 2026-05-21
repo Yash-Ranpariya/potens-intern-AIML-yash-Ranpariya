@@ -1011,40 +1011,91 @@ function App() {
       {showIntro && (
         <div style={{
           position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-          background: '#02040a', zIndex: 9999, display: 'flex', flexDirection: 'column',
+          background: '#030507', zIndex: 9999, display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center', color: '#f0f6fc',
-          fontFamily: '"Outfit", sans-serif', animation: 'fadeOut 1s ease 5s forwards',
-          cursor: 'pointer'
+          fontFamily: '"Outfit", sans-serif', cursor: 'pointer',
+          animation: 'crtFlicker 0.15s infinite'
         }} onClick={() => setShowIntro(false)}>
           
-          <div style={{ animation: 'fadeInScale 3s ease-out forwards', textAlign: 'center' }}>
-            <div style={{ fontSize: '14px', letterSpacing: '6px', color: '#f59e0b', marginBottom: '20px', opacity: 0.8, textTransform: 'uppercase' }}>
+          <div style={{ textAlign: 'center', position: 'relative' }}>
+            <div style={{ 
+              fontSize: '14px', letterSpacing: '8px', color: '#f59e0b', marginBottom: '20px', 
+              opacity: 0, textTransform: 'uppercase', animation: 'fadeInScale 2s ease-out 1s forwards' 
+            }}>
               Advanced Neural Operations
             </div>
+            
             <h1 style={{ 
-              fontSize: '84px', fontWeight: '900', margin: 0, 
-              background: 'linear-gradient(to bottom, #1e293b, #64748b)',
+              fontSize: '96px', fontWeight: '900', margin: 0, 
+              background: 'linear-gradient(180deg, #ffffff 0%, #94a3b8 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-              textShadow: '0px 10px 30px rgba(0,0,0,0.8)'
+              textShadow: '0px 10px 40px rgba(0,0,0,0.9), 0px 0px 20px rgba(245, 158, 11, 0.2)',
+              animation: 'cinematicBlurReveal 4s cubic-bezier(0.19, 1, 0.22, 1) forwards'
             }}>
               POTENS ENGINE
             </h1>
-            <p style={{ fontSize: '18px', color: '#94a3b8', marginTop: '24px', fontStyle: 'italic', maxWidth: '600px', margin: '24px auto 0' }}>
+
+            {/* Glitch Overlay effect */}
+            <h1 style={{ 
+              position: 'absolute', top: '39px', left: 0, right: 0,
+              fontSize: '96px', fontWeight: '900', margin: 0, 
+              color: 'rgba(245, 158, 11, 0.8)', mixBlendMode: 'screen',
+              animation: 'glitchSlice 3s infinite linear alternate-reverse, cinematicBlurReveal 4s cubic-bezier(0.19, 1, 0.22, 1) forwards'
+            }} aria-hidden="true">
+              POTENS ENGINE
+            </h1>
+
+            <p style={{ 
+              fontSize: '18px', color: '#64748b', marginTop: '24px', fontStyle: 'italic', 
+              maxWidth: '600px', margin: '24px auto 0', opacity: 0,
+              animation: 'fadeInScale 2s ease-out 2.5s forwards' 
+            }}>
               "Autonomous triage architecture operating in the deep network."
             </p>
           </div>
 
-          <div style={{ position: 'absolute', bottom: '60px', fontSize: '12px', letterSpacing: '2px', color: '#475569', animation: 'pulse 2s infinite' }}>
+          <div style={{ 
+            position: 'absolute', bottom: '60px', fontSize: '13px', letterSpacing: '4px', 
+            color: '#475569', opacity: 0, animation: 'fadeInScale 1s ease-out 4s forwards, pulse 2s infinite 4s' 
+          }}>
             [ CLICK ANYWHERE TO INITIALIZE ]
           </div>
           
           {/* Film grain overlay */}
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', background: 'url(https://grainy-gradients.vercel.app/noise.svg)', opacity: 0.35, mixBlendMode: 'overlay' }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', background: 'url(https://grainy-gradients.vercel.app/noise.svg)', opacity: 0.45, mixBlendMode: 'overlay' }} />
         </div>
       )}
 
       <div className="app-container" style={{ filter: showIntro ? 'blur(10px) brightness(0.5)' : 'none', transition: 'filter 1.5s ease-out' }}>
       <style>{`
+        @keyframes cinematicBlurReveal {
+          0% { filter: blur(25px); letter-spacing: 36px; opacity: 0; transform: scale(1.1); }
+          40% { filter: blur(8px); letter-spacing: 12px; opacity: 0.6; transform: scale(1.02); }
+          100% { filter: blur(0px); letter-spacing: normal; opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeInScale {
+          from { opacity: 0; transform: scale(0.95) translateY(10px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes crtFlicker {
+          0% { opacity: 0.97; }
+          5% { opacity: 0.85; }
+          10% { opacity: 0.97; }
+          15% { opacity: 1; }
+          50% { opacity: 0.98; }
+          52% { opacity: 0.85; }
+          54% { opacity: 1; }
+          100% { opacity: 0.96; }
+        }
+        @keyframes glitchSlice {
+          0%, 100% { clip-path: inset(50% 0 50% 0); transform: translate(0); }
+          10% { clip-path: inset(10% 0 80% 0); transform: translate(-3px, 1px); }
+          20% { clip-path: inset(80% 0 5% 0); transform: translate(3px, -1px); }
+          30% { clip-path: inset(40% 0 40% 0); transform: translate(-3px, 2px); }
+          40% { clip-path: inset(15% 0 60% 0); transform: translate(2px, -2px); }
+          50% { clip-path: inset(60% 0 20% 0); transform: translate(-2px, 1px); }
+          60% { clip-path: inset(30% 0 50% 0); transform: translate(0); }
+        }
         @keyframes radar-rotate {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
