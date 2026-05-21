@@ -16,7 +16,7 @@
   justify-content: space-between;
   align-items: center;
   padding-bottom: 18px;
-  border-bottom: 1px solid rgba(56, 139, 253, 0.14);
+  border-bottom: 1px solid var(--border-card);
   margin-bottom: 6px;
 }
 
@@ -37,7 +37,7 @@
   justify-content: center;
   font-weight: 800;
   font-size: 22px;
-  box-shadow: 0 0 20px rgba(239, 79, 95, 0.4), 0px 4px 0px #8b1a25;
+  box-shadow: 0 0 20px rgba(79, 70, 229, 0.4), 0px 4px 0px #8b1a25;
 }
 
 .logo-text h1 {
@@ -73,9 +73,9 @@
 .stat-card:hover {
   transform: translateY(-6px) scale(1.02);
   box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.5),
-    0 0 20px rgba(56, 139, 253, 0.08) !important;
-  border-left-color: rgba(56, 139, 253, 0.5) !important;
+    0 20px 50px rgba(148, 163, 184, 0.2),
+    0 0 20px var(--border-card) !important;
+  border-left-color: var(--border-card) !important;
 }
 
 .stat-icon-wrapper {
@@ -137,9 +137,9 @@
 
 .preset-card {
   padding: 12px 16px;
-  border: 1px solid rgba(56, 139, 253, 0.15);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-sm);
-  background: rgba(20, 27, 46, 0.6);
+  background: var(--bg-app);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
   text-align: left;
@@ -166,15 +166,15 @@
 }
 
 .preset-card:hover {
-  border-color: rgba(56, 139, 253, 0.45);
+  border-color: var(--border-card);
   transform: translateX(4px);
-  background: rgba(30, 40, 65, 0.8);
-  box-shadow: 0 4px 20px rgba(56, 139, 253, 0.1), 0 0 0 1px rgba(56, 139, 253, 0.1);
+  background: var(--bg-card);
+  box-shadow: 0 4px 20px var(--border-card), 0 0 0 1px var(--border-card);
 }
 
 .preset-card.active {
-  border-color: rgba(239, 79, 95, 0.5);
-  background: rgba(239, 79, 95, 0.08);
+  border-color: rgba(79, 70, 229, 0.5);
+  background: rgba(79, 70, 229, 0.08);
 }
 
 .preset-card.active::before {
@@ -227,12 +227,12 @@
   width: 100%;
   height: 120px;
   padding: 14px 16px;
-  border: 1px solid rgba(56, 139, 253, 0.2);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-sm);
   font-family: var(--font-sans);
   font-size: 14px;
   resize: none;
-  background: rgba(12, 16, 28, 0.7);
+  background: var(--bg-card);
   color: var(--text-main);
   transition: all 0.25s ease;
 }
@@ -241,9 +241,9 @@
 
 .complaint-textarea:focus {
   outline: none;
-  border-color: rgba(56, 139, 253, 0.6);
-  background: rgba(15, 20, 35, 0.85);
-  box-shadow: 0 0 0 3px rgba(56, 139, 253, 0.12), 0 0 20px rgba(56, 139, 253, 0.05);
+  border-color: var(--border-card);
+  background: var(--bg-card-hover);
+  box-shadow: 0 0 0 3px var(--border-card), 0 0 20px var(--border-card);
 }
 
 .input-actions {
@@ -264,22 +264,22 @@
 
 .terminal-container {
   flex-grow: 1;
-  background-color: rgba(5, 8, 15, 0.9);
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
-  border: 1px solid rgba(56, 139, 253, 0.2);
+  border: 1px solid var(--border-card);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: inset 0px 4px 16px rgba(0,0,0,0.6), 0 0 0 1px rgba(56, 139, 253, 0.05);
+  box-shadow: inset 0px 4px 16px rgba(148, 163, 184, 0.1), 0 0 0 1px var(--border-card);
 }
 
 .terminal-header {
-  background: rgba(15, 22, 40, 0.9);
+  background: rgba(241, 245, 249, 0.9);
   padding: 8px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(56, 139, 253, 0.12);
+  border-bottom: 1px solid var(--border-card);
 }
 
 .terminal-dots { display: flex; gap: 6px; }
@@ -289,7 +289,7 @@
 .terminal-dot.green { background: #10b981; box-shadow: 0 0 6px rgba(16,185,129,0.6); }
 
 .terminal-title {
-  color: rgba(56, 139, 253, 0.6);
+  color: var(--border-card);
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.5px;
@@ -319,8 +319,8 @@
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  background: rgba(239, 79, 95, 0.05);
-  border: 1px dashed rgba(239, 79, 95, 0.25);
+  background: rgba(79, 70, 229, 0.05);
+  border: 1px dashed rgba(79, 70, 229, 0.25);
   border-radius: var(--radius-sm);
   margin-bottom: 8px;
 }
@@ -354,7 +354,7 @@
 .step-spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(56, 139, 253, 0.2);
+  border: 2px solid var(--border-card);
   border-top-color: #388bfd;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -363,14 +363,14 @@
 /* Tool execution Visualizers */
 .tool-visualizer-container {
   margin-top: 16px;
-  border-top: 1px solid rgba(56, 139, 253, 0.12);
+  border-top: 1px solid var(--border-card);
   padding-top: 24px;
   animation: fadeIn 0.4s ease;
 }
 
 .visualizer-card {
-  background: rgba(15, 22, 40, 0.7);
-  border: 1px solid rgba(56, 139, 253, 0.2);
+  background: rgba(241, 245, 249, 0.9);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   overflow: hidden;
@@ -378,8 +378,8 @@
 
 .visualizer-header {
   padding: 14px 20px;
-  background: rgba(10, 15, 30, 0.8);
-  border-bottom: 1px solid rgba(56, 139, 253, 0.12);
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid var(--border-card);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -401,18 +401,18 @@
 .map-canvas-container {
   position: relative;
   height: 200px;
-  background: linear-gradient(135deg, #0a0f1e, #0d1526);
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.5), 0 0 0 1px rgba(56, 139, 253, 0.12);
+  box-shadow: inset 0 2px 10px rgba(148, 163, 184, 0.2), 0 0 0 1px var(--border-card);
 }
 
 .map-grid-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background-image:
-    linear-gradient(rgba(56, 139, 253, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(56, 139, 253, 0.08) 1px, transparent 1px);
+    linear-gradient(var(--border-card) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-card) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
@@ -420,7 +420,7 @@
   position: absolute;
   top: 50%; left: 10%;
   width: 80%; height: 2px;
-  background: rgba(56, 139, 253, 0.2);
+  background: var(--border-card);
   transform: translateY(-50%) rotate(5deg);
 }
 
@@ -441,7 +441,7 @@
 }
 
 .marker-label {
-  background: rgba(10, 15, 30, 0.9);
+  background: rgba(255, 255, 255, 0.8);
   color: #79c0ff;
   padding: 2px 6px;
   border-radius: 4px;
@@ -450,7 +450,7 @@
   box-shadow: var(--shadow-sm);
   white-space: nowrap;
   margin-bottom: 4px;
-  border: 1px solid rgba(56, 139, 253, 0.3);
+  border: 1px solid var(--border-card);
   backdrop-filter: blur(8px);
 }
 
@@ -466,7 +466,7 @@
 }
 
 .receipt-column {
-  border: 1px solid rgba(56, 139, 253, 0.15);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-sm);
   padding: 16px;
   background: rgba(12, 18, 32, 0.6);
@@ -552,7 +552,7 @@
 
 /* ==================== 1. Live Chat Simulator ==================== */
 .chat-container {
-  border: 1px solid rgba(56, 139, 253, 0.2);
+  border: 1px solid var(--border-card);
   border-radius: 12px;
   background: rgba(10, 14, 25, 0.7);
   display: flex;
@@ -569,7 +569,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: rgba(8, 12, 22, 0.5);
+  background: rgba(248, 250, 252, 0.85);
 }
 
 .chat-message {
@@ -589,16 +589,16 @@
 }
 
 .chat-message.customer .chat-bubble {
-  background: rgba(30, 40, 65, 0.8);
-  border: 1px solid rgba(56, 139, 253, 0.2);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
   color: var(--text-main);
   border-bottom-left-radius: 4px;
 }
 
 .chat-message.agent .chat-bubble {
-  background: linear-gradient(135deg, rgba(56, 139, 253, 0.2), rgba(56, 139, 253, 0.08));
+  background: linear-gradient(135deg, var(--border-card), var(--border-card));
   color: #79c0ff;
-  border: 1px solid rgba(56, 139, 253, 0.3);
+  border: 1px solid var(--border-card);
   border-bottom-right-radius: 4px;
 }
 
@@ -613,7 +613,7 @@
 
 .chat-input-bar {
   display: flex;
-  border-top: 1px solid rgba(56, 139, 253, 0.15);
+  border-top: 1px solid var(--border-card);
   background: rgba(12, 18, 32, 0.8);
   padding: 6px;
   gap: 6px;
@@ -632,9 +632,9 @@
 .chat-input::placeholder { color: var(--text-light); }
 
 .chat-send-btn {
-  background: rgba(56, 139, 253, 0.2);
+  background: var(--border-card);
   color: #79c0ff;
-  border: 1px solid rgba(56, 139, 253, 0.3);
+  border: 1px solid var(--border-card);
   padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
@@ -644,14 +644,14 @@
   transition: all 0.2s ease;
 }
 .chat-send-btn:hover {
-  background: rgba(56, 139, 253, 0.35);
-  border-color: rgba(56, 139, 253, 0.5);
+  background: var(--border-card);
+  border-color: var(--border-card);
 }
 
 /* ==================== 2. Sentiment Emoji Gauge ==================== */
 .sentiment-gauge-wrapper {
   background: rgba(12, 18, 32, 0.6);
-  border: 1px solid rgba(56, 139, 253, 0.15);
+  border: 1px solid var(--border-card);
   border-radius: 10px;
   padding: 12px;
 }
@@ -665,7 +665,7 @@
 
 .sentiment-bar-bg {
   height: 6px;
-  background: rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.06);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -678,14 +678,14 @@
 
 /* ==================== 3. SLA Ticking Countdown ==================== */
 .sla-timer-card {
-  background: rgba(8, 12, 22, 0.85);
+  background: rgba(248, 250, 252, 0.85);
   border-radius: 8px;
   padding: 10px 14px;
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid rgba(56, 139, 253, 0.2);
+  border: 1px solid var(--border-card);
 }
 
 .sla-digits {
@@ -703,7 +703,7 @@
 
 /* ==================== 4. Voice Recording Waveform ==================== */
 .voice-card {
-  border: 1px solid rgba(56, 139, 253, 0.2);
+  border: 1px solid var(--border-card);
   border-radius: 12px;
   background: rgba(10, 14, 25, 0.7);
   padding: 16px;
@@ -718,17 +718,17 @@
   justify-content: center;
   gap: 3px;
   height: 48px;
-  background: rgba(8, 12, 22, 0.6);
+  background: rgba(248, 250, 252, 0.85);
   border-radius: 8px;
   padding: 0 16px;
   overflow: hidden;
-  border: 1px solid rgba(56, 139, 253, 0.1);
+  border: 1px solid var(--border-card);
 }
 
 .waveform-bar {
   width: 3px;
   height: 10%;
-  background: rgba(56, 139, 253, 0.3);
+  background: var(--border-card);
   border-radius: 2px;
   transition: height 0.1s ease;
 }
@@ -736,13 +736,13 @@
 .waveform-bar.active {
   background: linear-gradient(180deg, #388bfd, #39d1f0);
   animation: soundwave 1.2s ease-in-out infinite alternate;
-  box-shadow: 0 0 6px rgba(56, 139, 253, 0.5);
+  box-shadow: 0 0 6px var(--border-card);
 }
 
 /* ==================== 5. Telemetry Logs ==================== */
 .telemetry-logs-terminal {
-  background: rgba(5, 8, 15, 0.9);
-  border: 1px solid rgba(56, 139, 253, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-card);
   border-radius: 10px;
   height: 120px;
   padding: 10px;
@@ -763,12 +763,12 @@
 
 /* ==================== TREE NODES (Reasoning Steps) ==================== */
 .tree-node {
-  border-left: 2px solid rgba(56, 139, 253, 0.5);
+  border-left: 2px solid var(--border-card);
   position: relative;
   margin-left: 20px;
   padding-left: 18px;
   margin-bottom: 14px;
-  background: rgba(56, 139, 253, 0.03);
+  background: var(--border-card);
   border-radius: 0 10px 10px 0;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -776,10 +776,10 @@
 }
 
 .tree-node:hover {
-  background: rgba(56, 139, 253, 0.07);
+  background: var(--border-card);
   border-left-color: #79c0ff;
   transform: translateX(4px);
-  box-shadow: 0 0 20px rgba(56, 139, 253, 0.08);
+  box-shadow: 0 0 20px var(--border-card);
 }
 
 .tree-node::before {
@@ -789,5 +789,5 @@
   width: 8px; height: 8px;
   background: #388bfd;
   border-radius: 50%;
-  box-shadow: 0 0 12px rgba(56, 139, 253, 0.8), 0 0 4px #388bfd;
+  box-shadow: 0 0 12px var(--border-card), 0 0 4px #388bfd;
 }

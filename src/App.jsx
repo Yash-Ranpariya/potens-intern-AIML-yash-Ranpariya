@@ -862,7 +862,7 @@ function App() {
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
             
             {/* Left side: CSS Bar chart */}
-            <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '20px' }}>
+            <div style={{ background: '#fafafa', border: '1px dashed #475569', borderRadius: '12px', padding: '20px' }}>
               <h3 style={{ fontSize: '13px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '16px', letterSpacing: '0.5px' }}>
                 Incident Volume by Category
               </h3>
@@ -879,7 +879,7 @@ function App() {
                       <span>{item.name}</span>
                       <span style={{ color: item.color }}>{item.count} ({item.pct}%)</span>
                     </div>
-                    <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ height: '8px', background: '#334155', borderRadius: '4px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: `${item.pct}%`, backgroundColor: item.color, borderRadius: '4px' }} />
                     </div>
                   </div>
@@ -888,7 +888,7 @@ function App() {
             </div>
 
             {/* Right side: CSS Donut Chart */}
-            <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ background: '#fafafa', border: '1px dashed #475569', borderRadius: '12px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
               <h3 style={{ fontSize: '13px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '16px', letterSpacing: '0.5px', alignSelf: 'flex-start' }}>
                 Priority Severity Share
               </h3>
@@ -1146,7 +1146,7 @@ function App() {
               fontSize: '11px', 
               padding: '5px 10px', 
               background: '#f8fafc',
-              border: '1px solid #cbd5e1',
+              border: '1px solid #475569',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
@@ -1168,7 +1168,7 @@ function App() {
               fontSize: '11px', 
               padding: '5px 10px', 
               background: '#f8fafc',
-              border: '1px solid #cbd5e1',
+              border: '1px solid #475569',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
@@ -1190,7 +1190,7 @@ function App() {
               fontSize: '11px', 
               padding: '5px 10px', 
               background: '#f8fafc',
-              border: '1px solid #cbd5e1',
+              border: '1px solid #475569',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
@@ -1443,7 +1443,7 @@ function App() {
               {/* Dynamic Transcript Reveal */}
               <div style={{
                 background: '#fafafa',
-                border: '1px dashed #cbd5e1',
+                border: '1px dashed #475569',
                 borderRadius: '8px',
                 padding: '12px',
                 minHeight: '60px'
@@ -1451,7 +1451,7 @@ function App() {
                 <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>
                   Speech-to-Text Live Transcript
                 </div>
-                <p style={{ fontSize: '13px', color: '#0f172a', margin: 0, fontStyle: 'italic' }}>
+                <p style={{ fontSize: '13px', color: '#f1f5f9', margin: 0, fontStyle: 'italic' }}>
                   {audioTranscriptText || "[Click Play button above to start speaker voice decoding...]"}
                 </p>
               </div>
@@ -1471,7 +1471,7 @@ function App() {
                   width: '100%',
                   padding: '12px',
                   borderRadius: '8px',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid #475569',
                   fontSize: '13px',
                   lineHeight: '1.5',
                   resize: 'none',
@@ -1495,7 +1495,7 @@ function App() {
                   style={{
                     width: '100%',
                     padding: '10px 14px',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #475569',
                     borderRadius: '8px',
                     fontSize: '13px',
                     backgroundColor: extractedOrderId ? '#f0fdf4' : '#fffbeb',
@@ -1518,7 +1518,7 @@ function App() {
                 style={{
                   width: '100%',
                   padding: '10px 14px',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid #475569',
                   borderRadius: '8px',
                   fontSize: '13px',
                   backgroundColor: extractedUserId ? '#f0fdf4' : '#fffbeb',
@@ -1541,7 +1541,7 @@ function App() {
                   style={{
                     width: '100%',
                     padding: '10px 14px',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid #475569',
                     borderRadius: '8px',
                     fontSize: '13px',
                     backgroundColor: extractedInvoiceId ? '#f0fdf4' : '#fffbeb',
@@ -1579,7 +1579,7 @@ function App() {
                   background: '#f1f5f9',
                   color: '#334155',
                   boxShadow: 'none',
-                  border: '1px solid #cbd5e1',
+                  border: '1px solid #475569',
                   marginRight: 'auto'
                 }}
               >
@@ -1609,7 +1609,7 @@ function App() {
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                 <thead>
-                  <tr style={{ background: '#0f172a', color: '#94a3b8', textAlign: 'left', textTransform: 'uppercase', fontSize: '11px' }}>
+                  <tr style={{ background: '#f1f5f9', color: '#64748b', textAlign: 'left', textTransform: 'uppercase', fontSize: '11px' }}>
                     <th style={{ padding: '8px 12px', borderRadius: '6px 0 0 6px' }}>Time</th>
                     <th style={{ padding: '8px 12px' }}>ID</th>
                     <th style={{ padding: '8px 12px' }}>Snippet</th>
@@ -1620,10 +1620,10 @@ function App() {
                 </thead>
                 <tbody>
                   {ticketHistory.map((tkt, i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', color: '#e2e8f0' }}>
-                      <td style={{ padding: '10px 12px', color: '#94a3b8' }}>{tkt.time}</td>
+                    <tr key={i} style={{ borderBottom: '1px solid rgba(0,0,0,0.05)', color: '#334155' }}>
+                      <td style={{ padding: '10px 12px', color: '#64748b' }}>{tkt.time}</td>
                       <td style={{ padding: '10px 12px', fontWeight: 'bold' }}>{tkt.id}</td>
-                      <td style={{ padding: '10px 12px', fontStyle: 'italic', color: '#cbd5e1' }}>{tkt.text}</td>
+                      <td style={{ padding: '10px 12px', fontStyle: 'italic', color: '#475569' }}>{tkt.text}</td>
                       <td style={{ padding: '10px 12px' }}>{tkt.category}</td>
                       <td style={{ padding: '10px 12px' }}>
                         <span style={{ 
@@ -1660,7 +1660,7 @@ function App() {
             {/* 2. SLA Ticking Timer */}
             {slaSeconds > 0 && (
               <div className="sla-timer-card">
-                <span style={{ fontSize: '10px', textTransform: 'uppercase', color: '#94a3b8', marginRight: '8px' }}>
+                <span style={{ fontSize: '10px', textTransform: 'uppercase', color: '#64748b', marginRight: '8px' }}>
                   SLA COUNTDOWN
                 </span>
                 <span className={`sla-digits ${slaSeconds < 120 ? 'imminent' : ''}`}>
@@ -1742,7 +1742,7 @@ function App() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
                 <div style={{ 
                    background: '#f8fafc', 
-                   border: '1px solid #cbd5e1', 
+                   border: '1px solid #475569', 
                    borderRadius: '8px', 
                    padding: '10px 14px' 
                 }}>
@@ -1755,7 +1755,7 @@ function App() {
 
                 <div style={{ 
                    background: '#f8fafc', 
-                   border: '1px solid #cbd5e1', 
+                   border: '1px solid #475569', 
                    borderRadius: '8px', 
                    padding: '10px 14px' 
                 }}>
@@ -1771,14 +1771,14 @@ function App() {
 
                 <div style={{ 
                    background: '#f8fafc', 
-                   border: '1px solid #cbd5e1', 
+                   border: '1px solid #475569', 
                    borderRadius: '8px', 
                    padding: '10px 14px' 
                 }}>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>CONFIDENCE SCORE</div>
                   <div style={{ fontSize: '16px', fontWeight: '800', color: triageOutput.confidence_score > 85 ? '#10b981' : triageOutput.confidence_score > 60 ? '#f59e0b' : '#ef4444', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     {triageOutput.confidence_score}%
-                    <div style={{ width: '100%', height: '4px', background: '#e2e8f0', borderRadius: '2px', marginLeft: '6px', overflow: 'hidden' }}>
+                    <div style={{ width: '100%', height: '4px', background: '#334155', borderRadius: '2px', marginLeft: '6px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: `${triageOutput.confidence_score}%`, background: triageOutput.confidence_score > 85 ? '#10b981' : triageOutput.confidence_score > 60 ? '#f59e0b' : '#ef4444' }} />
                     </div>
                   </div>
@@ -1801,7 +1801,7 @@ function App() {
                 }}>
                   {animatedTrace.map((step, idx) => (
                     <div key={idx} className="tree-node animate-fadeIn" style={{ animationDelay: `${idx * 0.1}s` }}>
-                      <div style={{ fontSize: '13px', fontWeight: '500', color: '#e2e8f0' }}>{step}</div>
+                      <div style={{ fontSize: '13px', fontWeight: '500', color: '#334155' }}>{step}</div>
                     </div>
                   ))}
                 </div>
@@ -1810,31 +1810,31 @@ function App() {
               {/* Baseline Comparison A/B Panel */}
               {baselineResult && (
                 <div style={{ 
-                  background: '#0f172a',
-                  border: '1px solid #334155',
+                  background: '#f1f5f9',
+                  border: '1px solid #e2e8f0',
                   borderRadius: '10px',
                   padding: '16px',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '12px'
                 }}>
-                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase' }}>
+                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>
                     Agent vs Baseline Comparison
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                    <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                    <div style={{ background: '#ffffff', padding: '12px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
                       <div style={{ fontSize: '12px', color: '#10b981', fontWeight: 'bold', marginBottom: '8px' }}>🤖 Triage Agent</div>
-                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Category:</strong> {triageOutput.category}</div>
-                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Priority:</strong> {triageOutput.priority}</div>
-                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Tool:</strong> {triageOutput.next_tool || "None"}</div>
-                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Reasoning:</strong> {triageOutput.reasoning_trace.split('\n').length} Steps</div>
+                      <div style={{ fontSize: '12px', color: '#475569' }}><strong>Category:</strong> {triageOutput.category}</div>
+                      <div style={{ fontSize: '12px', color: '#475569' }}><strong>Priority:</strong> {triageOutput.priority}</div>
+                      <div style={{ fontSize: '12px', color: '#475569' }}><strong>Tool:</strong> {triageOutput.next_tool || "None"}</div>
+                      <div style={{ fontSize: '12px', color: '#475569' }}><strong>Reasoning:</strong> {triageOutput.reasoning_trace.split('\n').length} Steps</div>
                     </div>
-                    <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                    <div style={{ background: '#ffffff', padding: '12px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
                       <div style={{ fontSize: '12px', color: '#ef4444', fontWeight: 'bold', marginBottom: '8px' }}>📏 Baseline Regex</div>
-                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Category:</strong> {baselineResult.category}</div>
-                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Priority:</strong> {baselineResult.priority}</div>
-                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Tool:</strong> ❌ None</div>
-                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Reasoning:</strong> ❌ None</div>
+                      <div style={{ fontSize: '12px', color: '#475569' }}><strong>Category:</strong> {baselineResult.category}</div>
+                      <div style={{ fontSize: '12px', color: '#475569' }}><strong>Priority:</strong> {baselineResult.priority}</div>
+                      <div style={{ fontSize: '12px', color: '#475569' }}><strong>Tool:</strong> ❌ None</div>
+                      <div style={{ fontSize: '12px', color: '#475569' }}><strong>Reasoning:</strong> ❌ None</div>
                     </div>
                   </div>
                 </div>
@@ -1847,13 +1847,13 @@ function App() {
                 borderLeft: `4px solid ${agentProfile === 'saas' ? '#10b981' : 'var(--primary)'}`, 
                 borderRadius: '0 8px 8px 0',
                 fontSize: '13px',
-                color: '#e2e8f0'
+                color: '#334155'
               }}>
                 <strong>Operator Summary:</strong> {triageOutput.why}
               </div>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexGrow: 1, padding: '40px', color: 'var(--text-muted)', border: '1px dashed #cbd5e1', borderRadius: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexGrow: 1, padding: '40px', color: 'var(--text-muted)', border: '1px dashed #475569', borderRadius: '12px' }}>
               <Cpu size={48} style={{ opacity: 0.3, marginBottom: '12px' }} />
               <p>Execute triage analysis to generate agent response payload.</p>
             </div>
@@ -1949,7 +1949,7 @@ function App() {
                             <path 
                               d="M 160 80 Q 280 120, 360 80 T 550 140" 
                               fill="none" 
-                              stroke="#cbd5e1" 
+                              stroke="#475569" 
                               strokeWidth="4" 
                               strokeDasharray="6"
                             />
@@ -1996,7 +1996,7 @@ function App() {
                               </div>
                             );
                           })}
-                          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', fontWeight: '800', borderTop: '1px solid #cbd5e1', paddingTop: '8px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', fontWeight: '800', borderTop: '1px solid #475569', paddingTop: '8px' }}>
                             <span>Total Billed</span>
                             <span>₹{toolResult.order_total}</span>
                           </div>
@@ -2020,7 +2020,7 @@ function App() {
                               <span>Failed Packing Check</span>
                             </div>
                           )}
-                          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', fontWeight: '800', borderTop: '1px solid #cbd5e1', paddingTop: '8px', color: 'var(--text-muted)' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', fontWeight: '800', borderTop: '1px solid #475569', paddingTop: '8px', color: 'var(--text-muted)' }}>
                             <span>Pack Signature</span>
                             <span style={{ fontFamily: 'monospace' }}>{toolResult.restaurant_signature}</span>
                           </div>
@@ -2060,7 +2060,7 @@ function App() {
                         </div>
 
                         {/* Transaction Ledger */}
-                        <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '16px' }}>
+                        <div style={{ background: '#fafafa', border: '1px dashed #475569', borderRadius: '12px', padding: '16px' }}>
                           <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px' }}>Stripe Transaction Ledger</h4>
                           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                             <thead>
@@ -2126,7 +2126,7 @@ function App() {
                         </div>
 
                         {/* Interactive Server Logs Monitor */}
-                        <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div style={{ background: '#fafafa', border: '1px dashed #475569', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                           <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>
                             System Diagnostics Log Monitor
                           </h4>
@@ -2185,7 +2185,7 @@ function App() {
                         </div>
 
                         {/* Reset Details */}
-                        <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        <div style={{ background: '#fafafa', border: '1px dashed #475569', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                           <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>MFA Reset Token Validation</h4>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                             <Key size={18} style={{ color: '#10b981' }} />
@@ -2229,7 +2229,7 @@ function App() {
                         </div>
 
                         {/* Feature Summary */}
-                        <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '16px' }}>
+                        <div style={{ background: '#fafafa', border: '1px dashed #475569', borderRadius: '12px', padding: '16px' }}>
                           <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px' }}>Request Details</h4>
                           <p style={{ fontSize: '13px', fontStyle: 'italic', color: 'var(--text-main)' }}>
                             "{toolResult.ticket_summary}..."
@@ -2279,7 +2279,7 @@ function App() {
                             </div>
 
                             {/* Visual SecOps World Map */}
-                            <div className="map-canvas-container" style={{ backgroundColor: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                            <div className="map-canvas-container" style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
                               <div className="map-grid-overlay" style={{ opacity: 0.1 }}></div>
                               
                               {/* Glowing Cyber Radar Scanner Sweep Overlay */}
@@ -2366,7 +2366,7 @@ function App() {
                           </div>
 
                           {/* Automated Security Guardrails Audit Panel */}
-                          <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          <div style={{ background: '#fafafa', border: '1px dashed #475569', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>
                               Automated Guardrails Check
                             </h4>
@@ -2429,7 +2429,7 @@ function App() {
                         width: '100%', 
                         maxWidth: '450px', 
                         background: '#fafafa', 
-                        border: '1px dashed #cbd5e1', 
+                        border: '1px dashed #475569', 
                         borderRadius: '8px', 
                         padding: '12px', 
                         textAlign: 'left',
