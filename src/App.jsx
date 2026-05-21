@@ -311,6 +311,7 @@ function App() {
   const [agentProfile, setAgentProfile] = useState("saas");
   const [selectedPreset, setSelectedPreset] = useState("preset-saas-1");
   const [workspaceMode, setWorkspaceMode] = useState("chat"); // 'chat', 'audio', or 'text'
+  const [showIntro, setShowIntro] = useState(true);
 
   // Chat interface state
   const [chatHistory, setChatHistory] = useState([
@@ -883,7 +884,7 @@ function App() {
                       <span>{item.name}</span>
                       <span style={{ color: item.color }}>{item.count} ({item.pct}%)</span>
                     </div>
-                    <div style={{ height: '8px', background: '#334155', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: `${item.pct}%`, backgroundColor: item.color, borderRadius: '4px' }} />
                     </div>
                   </div>
@@ -976,7 +977,7 @@ function App() {
                   <td style={{ padding: '10px 8px' }}>{row.channel}</td>
                   <td style={{ padding: '10px 8px' }}>
                     <span style={{ 
-                      backgroundColor: row.lang !== 'English' ? '#eef2ff' : '#f1f5f9', 
+                      backgroundColor: row.lang !== 'English' ? '#eef2ff' : '#0f172a', 
                       color: row.lang !== 'English' ? '#4f46e5' : '#475569', 
                       padding: '2px 6px', 
                       borderRadius: '4px',
@@ -1006,7 +1007,43 @@ function App() {
   const activeSentiment = getSentiment(lastCustomerText);
 
   return (
-    <div className="app-container">
+    <>
+      {showIntro && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+          background: '#02040a', zIndex: 9999, display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center', color: '#f0f6fc',
+          fontFamily: '"Outfit", sans-serif', animation: 'fadeOut 1s ease 5s forwards',
+          cursor: 'pointer'
+        }} onClick={() => setShowIntro(false)}>
+          
+          <div style={{ animation: 'fadeInScale 3s ease-out forwards', textAlign: 'center' }}>
+            <div style={{ fontSize: '14px', letterSpacing: '6px', color: '#f59e0b', marginBottom: '20px', opacity: 0.8, textTransform: 'uppercase' }}>
+              Advanced Neural Operations
+            </div>
+            <h1 style={{ 
+              fontSize: '84px', fontWeight: '900', margin: 0, 
+              background: 'linear-gradient(to bottom, #1e293b, #64748b)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+              textShadow: '0px 10px 30px rgba(0,0,0,0.8)'
+            }}>
+              POTENS ENGINE
+            </h1>
+            <p style={{ fontSize: '18px', color: '#94a3b8', marginTop: '24px', fontStyle: 'italic', maxWidth: '600px', margin: '24px auto 0' }}>
+              "Autonomous triage architecture operating in the deep network."
+            </p>
+          </div>
+
+          <div style={{ position: 'absolute', bottom: '60px', fontSize: '12px', letterSpacing: '2px', color: '#475569', animation: 'pulse 2s infinite' }}>
+            [ CLICK ANYWHERE TO INITIALIZE ]
+          </div>
+          
+          {/* Film grain overlay */}
+          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', background: 'url(https://grainy-gradients.vercel.app/noise.svg)', opacity: 0.35, mixBlendMode: 'overlay' }} />
+        </div>
+      )}
+
+      <div className="app-container" style={{ filter: showIntro ? 'blur(10px) brightness(0.5)' : 'none', transition: 'filter 1.5s ease-out' }}>
       <style>{`
         @keyframes radar-rotate {
           from { transform: rotate(0deg); }
@@ -1300,7 +1337,7 @@ function App() {
             
             {/* Mode Toggles */}
             <div style={{
-              background: '#f1f5f9',
+              background: '#0f172a',
               padding: '3px',
               borderRadius: '8px',
               display: 'flex',
@@ -1371,7 +1408,7 @@ function App() {
                   {isAnalyzing && (
                     <div className="chat-message agent">
                       <span className="chat-sender">Triage System</span>
-                      <div className="chat-bubble" style={{ background: '#f1f5f9', color: '#64748b' }}>
+                      <div className="chat-bubble" style={{ background: '#0f172a', color: '#64748b' }}>
                         Processing ticket routing telemetry...
                       </div>
                     </div>
@@ -1455,7 +1492,7 @@ function App() {
                 <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>
                   Speech-to-Text Live Transcript
                 </div>
-                <p style={{ fontSize: '13px', color: '#f1f5f9', margin: 0, fontStyle: 'italic' }}>
+                <p style={{ fontSize: '13px', color: '#0f172a', margin: 0, fontStyle: 'italic' }}>
                   {audioTranscriptText || "[Click Play button above to start speaker voice decoding...]"}
                 </p>
               </div>
@@ -1580,8 +1617,8 @@ function App() {
                 className="btn-3d btn-3d-secondary"
                 onClick={downloadTriageReport}
                 style={{
-                  background: '#f1f5f9',
-                  color: '#334155',
+                  background: '#0f172a',
+                  color: '#e2e8f0',
                   boxShadow: 'none',
                   border: '1px solid #475569',
                   marginRight: 'auto'
@@ -1613,7 +1650,7 @@ function App() {
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                 <thead>
-                  <tr style={{ background: '#f1f5f9', color: '#64748b', textAlign: 'left', textTransform: 'uppercase', fontSize: '11px' }}>
+                  <tr style={{ background: '#0f172a', color: '#64748b', textAlign: 'left', textTransform: 'uppercase', fontSize: '11px' }}>
                     <th style={{ padding: '8px 12px', borderRadius: '6px 0 0 6px' }}>Time</th>
                     <th style={{ padding: '8px 12px' }}>ID</th>
                     <th style={{ padding: '8px 12px' }}>Snippet</th>
@@ -1624,7 +1661,7 @@ function App() {
                 </thead>
                 <tbody>
                   {ticketHistory.map((tkt, i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid rgba(0,0,0,0.05)', color: '#334155' }}>
+                    <tr key={i} style={{ borderBottom: '1px solid rgba(0,0,0,0.05)', color: '#e2e8f0' }}>
                       <td style={{ padding: '10px 12px', color: '#64748b' }}>{tkt.time}</td>
                       <td style={{ padding: '10px 12px', fontWeight: 'bold' }}>{tkt.id}</td>
                       <td style={{ padding: '10px 12px', fontStyle: 'italic', color: '#475569' }}>{tkt.text}</td>
@@ -1782,7 +1819,7 @@ function App() {
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>CONFIDENCE SCORE</div>
                   <div style={{ fontSize: '16px', fontWeight: '800', color: triageOutput.confidence_score > 85 ? '#10b981' : triageOutput.confidence_score > 60 ? '#f59e0b' : '#ef4444', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     {triageOutput.confidence_score}%
-                    <div style={{ width: '100%', height: '4px', background: '#334155', borderRadius: '2px', marginLeft: '6px', overflow: 'hidden' }}>
+                    <div style={{ width: '100%', height: '4px', background: '#e2e8f0', borderRadius: '2px', marginLeft: '6px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: `${triageOutput.confidence_score}%`, background: triageOutput.confidence_score > 85 ? '#10b981' : triageOutput.confidence_score > 60 ? '#f59e0b' : '#ef4444' }} />
                     </div>
                   </div>
@@ -1805,7 +1842,7 @@ function App() {
                 }}>
                   {animatedTrace.map((step, idx) => (
                     <div key={idx} className="tree-node animate-fadeIn" style={{ animationDelay: `${idx * 0.1}s` }}>
-                      <div style={{ fontSize: '13px', fontWeight: '500', color: '#334155' }}>{step}</div>
+                      <div style={{ fontSize: '13px', fontWeight: '500', color: '#e2e8f0' }}>{step}</div>
                     </div>
                   ))}
                 </div>
@@ -1814,7 +1851,7 @@ function App() {
               {/* Baseline Comparison A/B Panel */}
               {baselineResult && (
                 <div style={{ 
-                  background: '#f1f5f9',
+                  background: '#0f172a',
                   border: '1px solid #e2e8f0',
                   borderRadius: '10px',
                   padding: '16px',
@@ -1826,14 +1863,14 @@ function App() {
                     Agent vs Baseline Comparison
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                    <div style={{ background: '#ffffff', padding: '12px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                    <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
                       <div style={{ fontSize: '12px', color: '#10b981', fontWeight: 'bold', marginBottom: '8px' }}>🤖 Triage Agent</div>
                       <div style={{ fontSize: '12px', color: '#475569' }}><strong>Category:</strong> {triageOutput.category}</div>
                       <div style={{ fontSize: '12px', color: '#475569' }}><strong>Priority:</strong> {triageOutput.priority}</div>
                       <div style={{ fontSize: '12px', color: '#475569' }}><strong>Tool:</strong> {triageOutput.next_tool || "None"}</div>
                       <div style={{ fontSize: '12px', color: '#475569' }}><strong>Reasoning:</strong> {triageOutput.reasoning_trace.split('\n').length} Steps</div>
                     </div>
-                    <div style={{ background: '#ffffff', padding: '12px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                    <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
                       <div style={{ fontSize: '12px', color: '#ef4444', fontWeight: 'bold', marginBottom: '8px' }}>📏 Baseline Regex</div>
                       <div style={{ fontSize: '12px', color: '#475569' }}><strong>Category:</strong> {baselineResult.category}</div>
                       <div style={{ fontSize: '12px', color: '#475569' }}><strong>Priority:</strong> {baselineResult.priority}</div>
@@ -1851,7 +1888,7 @@ function App() {
                 borderLeft: `4px solid ${agentProfile === 'saas' ? '#10b981' : 'var(--primary)'}`, 
                 borderRadius: '0 8px 8px 0',
                 fontSize: '13px',
-                color: '#334155'
+                color: '#e2e8f0'
               }}>
                 <strong>Operator Summary:</strong> {triageOutput.why}
               </div>
@@ -2283,7 +2320,7 @@ function App() {
                             </div>
 
                             {/* Visual SecOps World Map */}
-                            <div className="map-canvas-container" style={{ backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                            <div className="map-canvas-container" style={{ backgroundColor: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
                               <div className="map-grid-overlay" style={{ opacity: 0.1 }}></div>
                               
                               {/* Glowing Cyber Radar Scanner Sweep Overlay */}
@@ -2540,6 +2577,7 @@ function App() {
         <p>© 2026 Zomato AI & Ultimate Triage Architect Routing Guardrails System. All automated decisions follow data safety and customer support SLAs.</p>
       </footer>
     </div>
+    </>
   );
 }
 
