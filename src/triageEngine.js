@@ -13,7 +13,8 @@ export function runTriage(complaintText, agentProfile = 'zomato') {
       next_tool: null,
       tool_arguments: {},
       reasoning_trace: "Step 1: Analyzed text input.\nResult: Input text is empty. No triage can be performed.",
-      why: "Empty input text provided."
+      why: "Empty input text provided.",
+      confidence_score: 0
     };
   }
 
@@ -63,7 +64,8 @@ export function runTriage(complaintText, agentProfile = 'zomato') {
           client_ip: "198.51.100.42" // Simulated attacker IP
         },
         reasoning_trace: traceSteps.join("\n"),
-        why: "An explicit security threat or injection payload was detected in the ticket. Routing immediately to human security supervisors (P0)."
+        why: "An explicit security threat or injection payload was detected in the ticket. Routing immediately to human security supervisors (P0).",
+        confidence_score: 99
       };
     }
 
@@ -90,7 +92,8 @@ export function runTriage(complaintText, agentProfile = 'zomato') {
           reason: "Ticket text is ambiguous or lacks platform-specific identifiers."
         },
         reasoning_trace: traceSteps.join("\n"),
-        why: "Complaint details are ambiguous and confidence score fell below 85%. Routed to human supervisor (P0) under escalation policies."
+        why: "Complaint details are ambiguous and confidence score fell below 85%. Routed to human supervisor (P0) under escalation policies.",
+        confidence_score: 42
       };
     }
 
@@ -182,7 +185,8 @@ export function runTriage(complaintText, agentProfile = 'zomato') {
         next_tool: null,
         tool_arguments: {},
         reasoning_trace: traceSteps.join("\n"),
-        why: `Missing critical credentials (${missingStr}) required for tool operations. Blocked automated trigger.`
+        why: `Missing critical credentials (${missingStr}) required for tool operations. Blocked automated trigger.`,
+        confidence_score: 65
       };
     }
 
@@ -217,7 +221,8 @@ export function runTriage(complaintText, agentProfile = 'zomato') {
       next_tool,
       tool_arguments,
       reasoning_trace: traceSteps.join("\n"),
-      why: `SaaS ticket classified as ${category} (${priority}). Routing to tool: ${next_tool || 'None'}.`
+      why: `SaaS ticket classified as ${category} (${priority}). Routing to tool: ${next_tool || 'None'}.`,
+      confidence_score: 94
     };
   }
 
@@ -243,7 +248,8 @@ export function runTriage(complaintText, agentProfile = 'zomato') {
       next_tool: null,
       tool_arguments: {},
       reasoning_trace: "Step 1: Analyzed text input for order/delivery context.\nResult: The text lacks any specific delivery keywords or contains too few words to determine the issue.\nStep 2: Applied guardrails.\nResult: Input is classified as ambiguous. Setting tool to null to prevent execution on invalid complaints.",
-      why: "Complaint is ambiguous and contains no reference to order details, delivery status, or food quality."
+      why: "Complaint is ambiguous and contains no reference to order details, delivery status, or food quality.",
+      confidence_score: 38
     };
   }
 
@@ -338,7 +344,8 @@ export function runTriage(complaintText, agentProfile = 'zomato') {
       next_tool: null,
       tool_arguments: {},
       reasoning_trace: `Step 1: Classified complaint category as '${category}' and priority as '${priority}'.\nStep 2: Checked for critical transaction identifiers.\nResult: Identified missing metadata parameter: ${missingStr}.\nStep 3: Applied guardrail rule - Never guess IDs or invoke tools without them.\nResult: Aborted tool invocation. Recommending operator to request ${missingStr} from the user.`,
-      why: `Missing required transaction identifiers (${missingStr}) in complaint. Tool execution blocked.`
+      why: `Missing required transaction identifiers (${missingStr}) in complaint. Tool execution blocked.`,
+      confidence_score: 72
     };
   }
 
@@ -392,6 +399,18 @@ export function runTriage(complaintText, agentProfile = 'zomato') {
     next_tool,
     tool_arguments,
     reasoning_trace: traceSteps.join("\n"),
-    why: `Complaint classified as ${category} (${priority}). Next step: ${next_tool ? `Trigger ${next_tool}` : 'No tool trigger required'}.`
+    why: `Complaint classified as ${category} (${priority}). Next step: ${next_tool ? `Trigger ${next_tool}` : 'No tool trigger required'}.`,
+    confidence_score: 91
   };
+}
+
+export function baselineClassifier(text) {
+  const t = text.toLowerCase();
+  if (t.includes('late') || t.includes('delay') || t.includes('rider')) return { category: 'Delayed Delivery', priority: 'P2' };
+  if (t.includes('wrong') || t.includes('veg') || t.includes('chicken') || t.includes('allerg')) return { category: 'Wrong/Dietary', priority: 'P1' };
+  if (t.includes('missing') || t.includes('damaged') || t.includes('spilled') || t.includes('crushed')) return { category: 'Damaged/Missing', priority: 'P2' };
+  if (t.includes('billing') || t.includes('charge') || t.includes('invoice') || t.includes('refund')) return { category: 'Billing/Refund', priority: 'P2' };
+  if (t.includes('crash') || t.includes('bug') || t.includes('error') || t.includes('unresponsive')) return { category: 'Technical Bug', priority: 'P2' };
+  if (t.includes('login') || t.includes('mfa') || t.includes('lock') || t.includes('password')) return { category: 'Account Access', priority: 'P2' };
+  return { category: 'General Inquiry', priority: 'P2' };
 }

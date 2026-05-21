@@ -37,7 +37,7 @@ import {
   Send,
   Volume2
 } from 'lucide-react';
-import { runTriage } from './triageEngine';
+import { runTriage, baselineClassifier } from './triageEngine';
 import './App.css';
 
 // Mock presets database for Zomato
@@ -352,6 +352,9 @@ function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisStep, setAnalysisStep] = useState(0);
   const [triageOutput, setTriageOutput] = useState(null);
+  const [ticketHistory, setTicketHistory] = useState([]);
+  const [baselineResult, setBaselineResult] = useState(null);
+  const [animatedTrace, setAnimatedTrace] = useState([]);
   
   // Tool state
   const [activeToolName, setActiveToolName] = useState(null);
@@ -437,8 +440,29 @@ function App() {
 
     const timer4 = setTimeout(() => {
       const output = runTriage(lastCustomerText, agentProfile);
+      const baseline = baselineClassifier(lastCustomerText);
       setTriageOutput(output);
+      setBaselineResult(baseline);
       setIsAnalyzing(false);
+      
+      // Animate Reasoning Trace step-by-step
+      const steps = output.reasoning_trace.split('\n');
+      setAnimatedTrace([]);
+      steps.forEach((step, idx) => {
+        setTimeout(() => {
+          setAnimatedTrace(prev => [...prev, step]);
+        }, idx * 600); // 600ms stagger for typing effect
+      });
+
+      // Append to ticket history log
+      setTicketHistory(prev => [{
+        id: `TKT-${Math.floor(1000 + Math.random() * 9000)}`,
+        text: lastCustomerText.substring(0, 45) + '...',
+        category: output.category,
+        priority: output.priority,
+        confidence: output.confidence_score,
+        time: new Date().toLocaleTimeString()
+      }, ...prev].slice(0, 10)); // keep last 10
       
       // SLA allocation based on priority
       if (output.priority === "P0") setSlaSeconds(15 * 60); // 15 mins
@@ -794,94 +818,38 @@ function App() {
     if (!triageOutput) return;
     
     const ticketId = extractedOrderId || extractedUserId || `INC-${Math.floor(100000 + Math.random() * 900000)}`;
-    const reportHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Triage Incident Report - ${ticketId}</title>
-  <style>
-    body { font-family: 'Segoe UI', Roboto, sans-serif; color: #1e293b; padding: 40px; margin: 0; line-height: 1.6; }
-    .header { display: flex; justify-content: space-between; border-bottom: 2px solid #ef4f5f; padding-bottom: 12px; margin-bottom: 24px; }
-    .logo { font-size: 20px; font-weight: 800; color: #ef4f5f; }
-    .timestamp { font-size: 12px; color: #64748b; }
-    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
-    .badge-p0 { background: #fee2e2; color: #991b1b; }
-    .badge-p1 { background: #fef3c7; color: #92400e; }
-    .badge-p2 { background: #ecfdf5; color: #065f46; }
-    .section-title { font-size: 14px; font-weight: 700; color: #475569; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-top: 24px; margin-bottom: 12px; }
-    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-    .field-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; }
-    .field-label { font-size: 10px; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
-    .field-val { font-size: 14px; font-weight: 600; }
-    .log-box { background: #0f172a; color: #38bdf8; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 12px; white-space: pre-wrap; margin-top: 12px; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <div class="logo">🚨 ULTIMATE TRIAGE ARCHITECT INCIDENT REPORT</div>
-    <div class="timestamp">Generated: ${new Date().toLocaleString()}</div>
-  </div>
-  
-  <div class="field-grid">
-    <div class="field-card">
-      <div class="field-label">Reference Incident ID</div>
-      <div class="field-val">${ticketId}</div>
-    </div>
-    <div class="field-card">
-      <div class="field-label">Ingested Source Language</div>
-      <div class="field-val">${triageOutput.detectedLang || "English"}</div>
-    </div>
-  </div>
+    const reportData = {
+      incident_id: ticketId,
+      timestamp: new Date().toISOString(),
+      source_language: triageOutput.detectedLang || "English",
+      category: triageOutput.category,
+      priority: triageOutput.priority,
+      confidence_score: triageOutput.confidence_score,
+      raw_transcript: lastCustomerText,
+      extracted_entities: {
+        order_id: extractedOrderId || null,
+        user_id: extractedUserId || null,
+        invoice_id: extractedInvoiceId || null
+      },
+      automated_action: {
+        next_tool: triageOutput.next_tool || "None",
+        tool_arguments: triageOutput.tool_arguments || {}
+      },
+      reasoning_trace: triageOutput.reasoning_trace.split('\n'),
+      operator_summary: triageOutput.why
+    };
 
-  <div class="field-grid">
-    <div class="field-card">
-      <div class="field-label">Incident Category</div>
-      <div class="field-val">${triageOutput.category}</div>
-    </div>
-    <div class="field-card">
-      <div class="field-label">Priority Taxonomy</div>
-      <div class="field-val">
-        <span class="badge badge-${triageOutput.priority.toLowerCase()}">${triageOutput.priority}</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-title">Raw Incident Transcript</div>
-  <div style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; font-style: italic; font-size: 13.5px;">
-    "${lastCustomerText}"
-  </div>
-
-  <div class="section-title">Automated Dispatch Action & Reasoning</div>
-  <div class="field-grid" style="grid-template-columns: 2fr 1fr;">
-    <div class="field-card">
-      <div class="field-label">Triage Resolution Reasoning</div>
-      <div class="field-val" style="font-weight: normal; font-size: 13px;">${triageOutput.why}</div>
-    </div>
-    <div class="field-card">
-      <div class="field-label">Recommended Tool Call</div>
-      <div class="field-val" style="font-family: monospace; font-size: 13px; color: #ef4f5f;">${triageOutput.next_tool ? `${triageOutput.next_tool}()` : 'NONE'}</div>
-    </div>
-  </div>
-
-  <div class="section-title">System Execution Telemetry Trace</div>
-  <div class="log-box">${triageOutput.reasoning_trace || 'No logs recorded'}</div>
-
-  <footer style="margin-top: 40px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 16px;">
-    Decentralized Triage Orchestrator Engine • Confidential Operations Report
-  </footer>
-</body>
-</html>
-    `;
-
-    const blob = new Blob([reportHtml], { type: 'text/html' });
+    const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Triage_Incident_Report_${ticketId}.html`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `triage_report_${ticketId}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
+
 
   const renderAnalyticsView = () => {
     return (
@@ -1615,7 +1583,7 @@ function App() {
                   marginRight: 'auto'
                 }}
               >
-                📄 Export Report
+                📄 Export JSON
               </button>
             )}
             <button 
@@ -1631,6 +1599,53 @@ function App() {
             </button>
           </div>
         </section>
+
+        {/* Ticket Session History Log */}
+        {ticketHistory.length > 0 && (
+          <section className="glass-panel" style={{ marginTop: '20px' }}>
+            <h2 className="section-title" style={{ marginTop: 0, marginBottom: '12px' }}>
+              <Activity size={18} style={{ color: 'var(--primary)' }} /> Session Ticket History
+            </h2>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                <thead>
+                  <tr style={{ background: '#0f172a', color: '#94a3b8', textAlign: 'left', textTransform: 'uppercase', fontSize: '11px' }}>
+                    <th style={{ padding: '8px 12px', borderRadius: '6px 0 0 6px' }}>Time</th>
+                    <th style={{ padding: '8px 12px' }}>ID</th>
+                    <th style={{ padding: '8px 12px' }}>Snippet</th>
+                    <th style={{ padding: '8px 12px' }}>Category</th>
+                    <th style={{ padding: '8px 12px' }}>Priority</th>
+                    <th style={{ padding: '8px 12px', borderRadius: '0 6px 6px 0' }}>Conf</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ticketHistory.map((tkt, i) => (
+                    <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', color: '#e2e8f0' }}>
+                      <td style={{ padding: '10px 12px', color: '#94a3b8' }}>{tkt.time}</td>
+                      <td style={{ padding: '10px 12px', fontWeight: 'bold' }}>{tkt.id}</td>
+                      <td style={{ padding: '10px 12px', fontStyle: 'italic', color: '#cbd5e1' }}>{tkt.text}</td>
+                      <td style={{ padding: '10px 12px' }}>{tkt.category}</td>
+                      <td style={{ padding: '10px 12px' }}>
+                        <span style={{ 
+                          padding: '2px 6px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold',
+                          background: tkt.priority === 'P0' ? '#ef4444' : tkt.priority === 'P1' ? '#f59e0b' : '#10b981',
+                          color: '#fff'
+                        }}>
+                          {tkt.priority}
+                        </span>
+                      </td>
+                      <td style={{ padding: '10px 12px' }}>
+                        <span style={{ color: tkt.confidence > 85 ? '#10b981' : tkt.confidence > 60 ? '#f59e0b' : '#ef4444' }}>
+                          {tkt.confidence}%
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
 
         {/* Right Side: Process Thinking & Strict Output */}
         <section className="glass-panel output-panel" style={{ textAlign: 'left' }}>
@@ -1724,7 +1739,7 @@ function App() {
               )}
 
               {/* Classification Cards */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
                 <div style={{ 
                    background: '#f8fafc', 
                    border: '1px solid #cbd5e1', 
@@ -1753,164 +1768,86 @@ function App() {
                     </span>
                   </div>
                 </div>
+
+                <div style={{ 
+                   background: '#f8fafc', 
+                   border: '1px solid #cbd5e1', 
+                   borderRadius: '8px', 
+                   padding: '10px 14px' 
+                }}>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>CONFIDENCE SCORE</div>
+                  <div style={{ fontSize: '16px', fontWeight: '800', color: triageOutput.confidence_score > 85 ? '#10b981' : triageOutput.confidence_score > 60 ? '#f59e0b' : '#ef4444', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    {triageOutput.confidence_score}%
+                    <div style={{ width: '100%', height: '4px', background: '#e2e8f0', borderRadius: '2px', marginLeft: '6px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${triageOutput.confidence_score}%`, background: triageOutput.confidence_score > 85 ? '#10b981' : triageOutput.confidence_score > 60 ? '#f59e0b' : '#ef4444' }} />
+                    </div>
+                  </div>
+                </div>
               </div>
 
 
-              {/* 5. Visual AI Processing Pipeline Monitor */}
+              {/* 5. Animated AI Reasoning Trace (Tree) */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   <Cpu size={13} style={{ color: 'var(--primary)' }} />
-                  <span>AI Agent Pipeline Monitor</span>
+                  <span>Agent Reasoning Trace</span>
                 </div>
                 
                 <div style={{ 
-                  background: '#f8fafc', 
-                  border: '1px solid #e2e8f0', 
-                  borderRadius: '10px', 
-                  padding: '16px',
+                  background: 'transparent',
+                  padding: '8px 0',
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '14px'
+                  flexDirection: 'column'
                 }}>
-                  {/* Step 1: Ingestion & Extraction */}
-                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
-                      <div style={{ 
-                        width: '20px', 
-                        height: '20px', 
-                        borderRadius: '50%', 
-                        backgroundColor: triageOutput ? '#10b981' : isAnalyzing ? '#3b82f6' : '#e2e8f0', 
-                        color: 'white',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '11px',
-                        fontWeight: 'bold'
-                      }}>
-                        {triageOutput ? "✓" : "1"}
-                      </div>
-                      <div style={{ width: '2px', flexGrow: 1, backgroundColor: '#e2e8f0', minHeight: '12px', marginTop: '4px' }} />
+                  {animatedTrace.map((step, idx) => (
+                    <div key={idx} className="tree-node animate-fadeIn" style={{ animationDelay: `${idx * 0.1}s` }}>
+                      <div style={{ fontSize: '13px', fontWeight: '500', color: '#e2e8f0' }}>{step}</div>
                     </div>
-                    <div>
-                      <div style={{ fontSize: '12.5px', fontWeight: '700', color: '#334155', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span>Ingestion & Data Extraction</span>
-                        {isAnalyzing && !triageOutput && (
-                          <span style={{ fontSize: '10px', color: '#3b82f6', background: '#dbeafe', padding: '1px 6px', borderRadius: '10px', fontWeight: 'normal' }}>Processing...</span>
-                        )}
-                      </div>
-                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
-                        {triageOutput 
-                          ? `Identified target entities: User ID (${triageOutput.extractedIds?.userId || 'None'}), Invoice (${triageOutput.extractedIds?.invoiceId || 'None'})`
-                          : isAnalyzing 
-                          ? "Scanning text parameters and customer metadata..." 
-                          : "Awaiting incident analysis launch."
-                        }
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 2: Guardrail Verification */}
-                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
-                      <div style={{ 
-                        width: '20px', 
-                        height: '20px', 
-                        borderRadius: '50%', 
-                        backgroundColor: triageOutput ? '#10b981' : isAnalyzing ? '#3b82f6' : '#e2e8f0', 
-                        color: 'white',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '11px',
-                        fontWeight: 'bold'
-                      }}>
-                        {triageOutput ? "✓" : "2"}
-                      </div>
-                      <div style={{ width: '2px', flexGrow: 1, backgroundColor: '#e2e8f0', minHeight: '12px', marginTop: '4px' }} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '12.5px', fontWeight: '700', color: '#334155' }}>Security Threat Inspection</div>
-                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
-                        {triageOutput 
-                          ? "System safety check complete. No critical injection threats detected."
-                          : isAnalyzing 
-                          ? "Running SQL injection validations & threat signatures..." 
-                          : "Shield ready."
-                        }
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 3: Categorization & Priority Routing */}
-                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
-                      <div style={{ 
-                        width: '20px', 
-                        height: '20px', 
-                        borderRadius: '50%', 
-                        backgroundColor: triageOutput ? '#10b981' : '#e2e8f0', 
-                        color: 'white',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '11px',
-                        fontWeight: 'bold'
-                      }}>
-                        {triageOutput ? "✓" : "3"}
-                      </div>
-                      <div style={{ width: '2px', flexGrow: 1, backgroundColor: '#e2e8f0', minHeight: '12px', marginTop: '4px' }} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '12.5px', fontWeight: '700', color: '#334155' }}>AI Logic Classification</div>
-                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
-                        {triageOutput 
-                          ? `Triaged as [${triageOutput.category}] with severity [${triageOutput.priority}]` 
-                          : "Determining priority tier."
-                        }
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 4: Recommended Integration Dispatch */}
-                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <div style={{ 
-                        width: '20px', 
-                        height: '20px', 
-                        borderRadius: '50%', 
-                        backgroundColor: toolResult ? '#10b981' : triageOutput ? '#f59e0b' : '#e2e8f0', 
-                        color: 'white',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '11px',
-                        fontWeight: 'bold'
-                      }}>
-                        {toolResult ? "✓" : "4"}
-                      </div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '12.5px', fontWeight: '700', color: '#334155' }}>Integration API Dispatch</div>
-                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
-                        {toolResult 
-                          ? `Successfully executed recommended action API [${activeToolName}]`
-                          : triageOutput 
-                          ? "Pending operator manual command confirmation."
-                          : "Awaiting execution trigger."
-                        }
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
+              {/* Baseline Comparison A/B Panel */}
+              {baselineResult && (
+                <div style={{ 
+                  background: '#0f172a',
+                  border: '1px solid #334155',
+                  borderRadius: '10px',
+                  padding: '16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px'
+                }}>
+                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase' }}>
+                    Agent vs Baseline Comparison
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                      <div style={{ fontSize: '12px', color: '#10b981', fontWeight: 'bold', marginBottom: '8px' }}>🤖 Triage Agent</div>
+                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Category:</strong> {triageOutput.category}</div>
+                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Priority:</strong> {triageOutput.priority}</div>
+                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Tool:</strong> {triageOutput.next_tool || "None"}</div>
+                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Reasoning:</strong> {triageOutput.reasoning_trace.split('\n').length} Steps</div>
+                    </div>
+                    <div style={{ background: '#1e293b', padding: '12px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                      <div style={{ fontSize: '12px', color: '#ef4444', fontWeight: 'bold', marginBottom: '8px' }}>📏 Baseline Regex</div>
+                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Category:</strong> {baselineResult.category}</div>
+                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Priority:</strong> {baselineResult.priority}</div>
+                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Tool:</strong> ❌ None</div>
+                      <div style={{ fontSize: '12px', color: '#cbd5e1' }}><strong>Reasoning:</strong> ❌ None</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Why Panel */}
               <div style={{ 
-                padding: '10px 14px', 
-                backgroundColor: agentProfile === 'saas' ? 'rgba(16, 185, 129, 0.04)' : 'rgba(239, 79, 95, 0.04)', 
+                padding: '12px 16px', 
+                backgroundColor: agentProfile === 'saas' ? 'rgba(16, 185, 129, 0.08)' : 'rgba(239, 79, 95, 0.08)', 
                 borderLeft: `4px solid ${agentProfile === 'saas' ? '#10b981' : 'var(--primary)'}`, 
                 borderRadius: '0 8px 8px 0',
-                fontSize: '12.5px'
+                fontSize: '13px',
+                color: '#e2e8f0'
               }}>
                 <strong>Operator Summary:</strong> {triageOutput.why}
               </div>
