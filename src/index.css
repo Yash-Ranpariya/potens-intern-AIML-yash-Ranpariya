@@ -228,7 +228,12 @@ body {
   border: 1px solid var(--border-card);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-3d-card);
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  
+  /* 3D Dynamic Tilt Logic */
+  transform-style: preserve-3d;
+  transform: rotateX(calc(var(--mouse-y, 0) * -4deg)) rotateY(calc(var(--mouse-x, 0) * 4deg)) translateZ(0);
+  
+  transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .glass-panel:hover {
@@ -238,7 +243,9 @@ body {
     0 20px 40px rgba(148, 163, 184, 0.2),
     0 0 20px rgba(79, 70, 229, 0.05),
     inset 0px 1px 0px rgba(255,255,255,1);
-  transform: translateY(-3px);
+    
+  /* Enhanced pop-out effect on hover */
+  transform: rotateX(calc(var(--mouse-y, 0) * -6deg)) rotateY(calc(var(--mouse-x, 0) * 6deg)) translateZ(20px);
 }
 
 /* ============================

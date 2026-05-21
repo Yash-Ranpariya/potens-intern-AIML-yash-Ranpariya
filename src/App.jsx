@@ -372,6 +372,10 @@ function App() {
       const x = (e.clientX - innerWidth / 2) / (innerWidth / 2);
       const y = (e.clientY - innerHeight / 2) / (innerHeight / 2);
       setParallaxOffset({ x, y });
+      
+      // Inject CSS variables for real 3D tilt effects
+      document.documentElement.style.setProperty('--mouse-x', x.toFixed(3));
+      document.documentElement.style.setProperty('--mouse-y', y.toFixed(3));
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
