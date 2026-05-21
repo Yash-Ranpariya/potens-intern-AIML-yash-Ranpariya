@@ -1,54 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
 :root {
   --font-heading: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Colors - Light Theme Zomato Aesthetics */
-  --bg-app: #f6f8fb;
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --bg-card-hover: rgba(255, 255, 255, 0.95);
-  --border-card: rgba(226, 232, 240, 0.8);
-  
-  --primary: #ef4f5f;       /* Zomato Red */
-  --primary-hover: #e03c4c;
-  --primary-light: #fff0f1;
-  --primary-border: #fcc2c7;
-  
-  --secondary: #1f2937;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --text-light: #94a3b8;
+  /* === CYBERPUNK DARK THEME COLOR TOKENS === */
+  --bg-app: #07090e;
+  --bg-card: rgba(18, 22, 36, 0.7);
+  --bg-card-hover: rgba(23, 28, 46, 0.85);
+  --border-card: rgba(56, 139, 253, 0.18);
+  --border-glow: rgba(56, 139, 253, 0.55);
 
-  /* Status Colors */
-  --p0-bg: #ffebeb;
-  --p0-text: #dc2626;
-  --p0-border: #fecaca;
-  
-  --p1-bg: #fffbeb;
-  --p1-text: #d97706;
-  --p1-border: #fef3c7;
-  
-  --p2-bg: #f0fdf4;
-  --p2-text: #16a34a;
-  --p2-border: #bbf7d0;
-  
-  --p-del-bg: #eff6ff;
-  --p-del-text: #2563eb;
-  --p-del-border: #bfdbfe;
+  --primary: #ef4f5f;
+  --primary-hover: #e03c4c;
+  --primary-light: rgba(239, 79, 95, 0.12);
+  --primary-border: rgba(239, 79, 95, 0.35);
+  --primary-glow: rgba(239, 79, 95, 0.4);
+
+  --accent-blue: #388bfd;
+  --accent-cyan: #39d1f0;
+  --accent-green: #10b981;
+  --accent-purple: #7c3aed;
+  --accent-amber: #f59e0b;
+
+  --secondary: #e2e8f0;
+  --text-main: #cdd9e5;
+  --text-muted: #768390;
+  --text-light: #4d5566;
+  --text-bright: #f0f6fc;
+
+  /* Status Colors - Cyberpunk Neon */
+  --p0-bg: rgba(239, 68, 68, 0.12);
+  --p0-text: #ff6b6b;
+  --p0-border: rgba(239, 68, 68, 0.35);
+
+  --p1-bg: rgba(245, 158, 11, 0.12);
+  --p1-text: #fbbf24;
+  --p1-border: rgba(245, 158, 11, 0.35);
+
+  --p2-bg: rgba(16, 185, 129, 0.1);
+  --p2-text: #34d399;
+  --p2-border: rgba(16, 185, 129, 0.3);
+
+  --p-del-bg: rgba(56, 139, 253, 0.1);
+  --p-del-text: #79c0ff;
+  --p-del-border: rgba(56, 139, 253, 0.3);
 
   /* Shadows */
-  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.05), 0 1px 3px -1px rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 12px 24px -4px rgba(148, 163, 184, 0.12), 0 4px 12px -2px rgba(148, 163, 184, 0.06);
-  --shadow-lg: 0 20px 32px -6px rgba(148, 163, 184, 0.18), 0 8px 16px -4px rgba(148, 163, 184, 0.08);
-  
-  /* 3D Soft Shadow style */
-  --shadow-3d: 0px 15px 35px -5px rgba(239, 79, 95, 0.15), 0px 5px 15px -3px rgba(0, 0, 0, 0.05), inset 0px -2px 0px rgba(0, 0, 0, 0.08);
-  --shadow-3d-button: 0px 4px 0px #c23846, 0px 8px 15px rgba(239, 79, 95, 0.3);
-  --shadow-3d-card: 0px 8px 24px rgba(148, 163, 184, 0.15), 0px 2px 6px rgba(0,0,0,0.03), inset 0px -4px 0px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 12px 32px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 20px 50px rgba(0,0,0,0.6), 0 8px 20px rgba(0,0,0,0.4);
+  --shadow-glow-blue: 0 0 20px rgba(56, 139, 253, 0.2), 0 0 40px rgba(56, 139, 253, 0.08);
+  --shadow-glow-red: 0 0 20px rgba(239, 79, 95, 0.25), 0 0 40px rgba(239, 79, 95, 0.1);
+  --shadow-3d: 0px 15px 35px -5px rgba(56, 139, 253, 0.12), 0px 5px 15px -3px rgba(0, 0, 0, 0.5), inset 0px -2px 0px rgba(0, 0, 0, 0.3);
+  --shadow-3d-button: 0px 4px 0px #c23846, 0px 8px 20px rgba(239, 79, 95, 0.35);
+  --shadow-3d-card: 0px 8px 30px rgba(0, 0, 0, 0.5), 0px 2px 6px rgba(0,0,0,0.4), inset 0px 1px 1px rgba(255,255,255,0.06), inset 0px -4px 0px rgba(0, 0, 0, 0.3);
 
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
 }
 
 * {
@@ -59,7 +70,8 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-app);
+  background: radial-gradient(ellipse at 30% 20%, #111827 0%, #07090e 60%, #020408 100%);
+  background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
@@ -67,80 +79,128 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Animated background grid lines */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    linear-gradient(rgba(56, 139, 253, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 139, 253, 0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 0;
+  pointer-events: none;
+}
+
 /* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+::-webkit-scrollbar-thumb { background: rgba(56, 139, 253, 0.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(56, 139, 253, 0.5); }
 
 #root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
-/* Animations */
+/* ============================
+   ANIMATIONS
+   ============================ */
+
 @keyframes float {
   0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-12px) rotate(3deg); }
+  50% { transform: translateY(-18px) rotate(4deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 }
 
 @keyframes pulse-soft {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(0.98); }
+  50% { opacity: 0.7; transform: scale(0.97); }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(20px); }
+  from { opacity: 0; transform: translateX(24px); }
   to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes glow {
   0%, 100% { box-shadow: var(--shadow-3d); }
-  50% { box-shadow: 0px 20px 40px -5px rgba(239, 79, 95, 0.25), 0px 8px 20px -3px rgba(0, 0, 0, 0.08), inset 0px -2px 0px rgba(0, 0, 0, 0.08); }
+  50% { box-shadow: 0px 20px 50px rgba(56, 139, 253, 0.2), 0px 8px 20px rgba(0,0,0,0.5), inset 0px -2px 0px rgba(0, 0, 0, 0.3); }
 }
 
-/* Helper Utility Classes */
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
 }
 
-.animate-pulse-soft {
-  animation: pulse-soft 3s ease-in-out infinite;
+@keyframes neon-border-pulse {
+  0%, 100% { border-color: rgba(56, 139, 253, 0.2); box-shadow: 0 0 0px rgba(56, 139, 253, 0); }
+  50% { border-color: rgba(56, 139, 253, 0.6); box-shadow: 0 0 15px rgba(56, 139, 253, 0.15); }
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-/* Parallax Background Elements */
+@keyframes pulse-glow-red {
+  0%   { box-shadow: 0 0 8px rgba(239, 68, 68, 0.5); }
+  50%  { box-shadow: 0 0 20px rgba(239, 68, 68, 0.85), 0 0 30px rgba(239, 68, 68, 0.3); }
+  100% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.5); }
+}
+
+@keyframes pulse-glow-amber {
+  0%   { box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
+  50%  { box-shadow: 0 0 20px rgba(245, 158, 11, 0.85); }
+  100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
+}
+
+@keyframes pulse-glow-green {
+  0%   { box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+  50%  { box-shadow: 0 0 20px rgba(16, 185, 129, 0.8); }
+  100% { box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+}
+
+@keyframes scan-line {
+  0%   { transform: translateY(-100%); opacity: 0.6; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@keyframes pulseColor {
+  from { opacity: 1; text-shadow: 0 0 10px rgba(244,63,94,0.7); }
+  to   { opacity: 0.5; text-shadow: 0 0 0px rgba(244,63,94,0); }
+}
+
+@keyframes soundwave {
+  0%   { height: 10%; }
+  100% { height: 80%; }
+}
+
+/* ============================
+   UTILITY CLASSES
+   ============================ */
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-pulse-soft { animation: pulse-soft 3s ease-in-out infinite; }
+.animate-fadeIn { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* ============================
+   BACKGROUND EFFECTS
+   ============================ */
+
 .parallax-bg {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
   pointer-events: none;
   overflow: hidden;
 }
@@ -148,8 +208,8 @@ body {
 .parallax-bubble {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(240,244,248,0.2) 100%);
-  filter: blur(4px);
+  background: radial-gradient(circle, rgba(56, 139, 253, 0.08) 0%, rgba(56, 139, 253, 0.01) 70%);
+  filter: blur(40px);
   will-change: transform;
 }
 
@@ -157,53 +217,68 @@ body {
   position: absolute;
   width: 120px;
   height: 120px;
-  opacity: 0.12;
+  opacity: 0.06;
   pointer-events: none;
-  filter: drop-shadow(0px 8px 16px rgba(0,0,0,0.1));
+  filter: drop-shadow(0px 8px 16px rgba(56, 139, 253, 0.3));
   will-change: transform;
 }
 
-/* Custom premium elements */
+/* ============================
+   GLASS PANEL (CORE CARD)
+   ============================ */
+
 .glass-panel {
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-card);
+  background: rgba(18, 22, 36, 0.65);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(56, 139, 253, 0.18);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-3d-card);
-  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow:
+    0 4px 30px rgba(0, 0, 0, 0.5),
+    0 1px 1px rgba(255, 255, 255, 0.05) inset,
+    0 -1px 0px rgba(56, 139, 253, 0.1) inset;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .glass-panel:hover {
-  background: var(--bg-card-hover);
-  box-shadow: 0px 12px 30px rgba(148, 163, 184, 0.25), inset 0px -4px 0px rgba(0, 0, 0, 0.05);
+  background: rgba(23, 28, 50, 0.78);
+  border-color: rgba(56, 139, 253, 0.38);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(56, 139, 253, 0.1),
+    0 1px 1px rgba(255, 255, 255, 0.06) inset;
+  transform: translateY(-3px);
 }
 
-/* 3D button */
+/* ============================
+   BUTTONS
+   ============================ */
+
 .btn-3d {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 11px 22px;
   border-radius: var(--radius-sm);
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 15px;
+  font-size: 14px;
   text-decoration: none;
   cursor: pointer;
   border: none;
-  background: var(--primary);
+  background: linear-gradient(135deg, #ef4f5f, #e03c4c);
   color: white;
   box-shadow: var(--shadow-3d-button);
-  transition: all 0.1s ease;
+  transition: all 0.15s ease;
+  letter-spacing: 0.2px;
 }
 
 .btn-3d:hover {
-  background: var(--primary-hover);
+  background: linear-gradient(135deg, #f56070, #ef4f5f);
   transform: translateY(1px);
-  box-shadow: 0px 3px 0px #c23846, 0px 6px 12px rgba(239, 79, 95, 0.3);
+  box-shadow: 0px 3px 0px #a02232, 0px 8px 20px rgba(239, 79, 95, 0.35);
 }
 
 .btn-3d:active {
@@ -212,62 +287,68 @@ body {
 }
 
 .btn-3d-secondary {
-  background: white;
+  background: rgba(30, 40, 60, 0.8);
   color: var(--text-main);
-  border: 1px solid #cbd5e1;
-  box-shadow: 0px 4px 0px #94a3b8, 0px 8px 15px rgba(148, 163, 184, 0.2);
+  border: 1px solid rgba(56, 139, 253, 0.3);
+  box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.5), 0px 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .btn-3d-secondary:hover {
-  background: #f8fafc;
+  background: rgba(40, 55, 80, 0.9);
+  border-color: rgba(56, 139, 253, 0.6);
   transform: translateY(1px);
-  box-shadow: 0px 3px 0px #94a3b8, 0px 6px 12px rgba(148, 163, 184, 0.2);
+  box-shadow: 0px 3px 0px rgba(0,0,0,0.5), 0px 6px 15px rgba(56, 139, 253, 0.15);
 }
 
 .btn-3d-secondary:active {
   transform: translateY(4px);
-  box-shadow: 0px 0px 0px #94a3b8, 0px 2px 4px rgba(148, 163, 184, 0.1);
+  box-shadow: 0px 0px 0px rgba(0,0,0,0.5);
 }
 
-/* Status pills */
+/* ============================
+   CYBERPUNK BADGE PILLS
+   ============================ */
+
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 5px 12px;
   border-radius: 9999px;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
   border: 1px solid transparent;
+  letter-spacing: 0.4px;
 }
 
 .badge-p0 {
-  background-color: var(--p0-bg);
-  color: var(--p0-text);
-  border-color: var(--p0-border);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.08));
+  color: #ff6b6b;
+  border-color: rgba(239, 68, 68, 0.4);
+  animation: pulse-glow-red 2s ease-in-out infinite;
 }
 
 .badge-p1 {
-  background-color: var(--p1-bg);
-  color: var(--p1-text);
-  border-color: var(--p1-border);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(245, 158, 11, 0.06));
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.38);
+  animation: pulse-glow-amber 2.5s ease-in-out infinite;
 }
 
 .badge-p2 {
-  background-color: var(--p2-bg);
-  color: var(--p2-text);
-  border-color: var(--p2-border);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.14), rgba(16, 185, 129, 0.04));
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.3);
 }
 
 .badge-neutral {
-  background-color: #f1f5f9;
-  color: #475569;
-  border-color: #e2e8f0;
+  background: rgba(30, 40, 60, 0.7);
+  color: #768390;
+  border-color: rgba(56, 139, 253, 0.2);
 }
 
-/* Category specific pills */
 .badge-category {
-  background-color: #eff6ff;
-  color: #1d4ed8;
-  border-color: #bfdbfe;
+  background: rgba(56, 139, 253, 0.1);
+  color: #79c0ff;
+  border-color: rgba(56, 139, 253, 0.3);
 }

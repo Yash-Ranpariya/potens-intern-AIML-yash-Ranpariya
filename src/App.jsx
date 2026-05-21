@@ -51,6 +51,14 @@ const ZOMATO_PRESETS = [
     priority: "P0"
   },
   {
+    id: "preset-gj-1",
+    title: "Gujarati Complaint (P1)",
+    shortDesc: "ઓર્ડર મોડો અને ફોન બંધ છે",
+    text: "મારો ઓર્ડર ZM-77112 હજી સુધી કેમ નથી મળ્યો? ડિલિવરી બોયનો ફોન પણ સ્વીચ ઓફ આવે છે. પ્લીઝ હેલ્પ કરો! યુઝર આઈડી U-5590.",
+    category: "Delayed Delivery",
+    priority: "P1"
+  },
+  {
     id: "preset-2",
     title: "Delivery Ruined (P0)",
     shortDesc: "Food spilled and box crushed",
@@ -109,6 +117,14 @@ const SAAS_PRESETS = [
     text: "I noticed multiple logins from other countries on my profile. When I try to change my password, it says the session expired. I think my account has been hacked! User ID: USR-3321.",
     category: "Account Access",
     priority: "P0"
+  },
+  {
+    id: "preset-hi-1",
+    title: "Hindi Support (P1)",
+    shortDesc: "पैसे कट गए पर सब्सक्रिप्शन नहीं मिला",
+    text: "मेरे पैसे कट गए हैं लेकिन अभी तक सब्सक्रिप्शन एक्टिव नहीं हुआ है। इनवॉइस INV-99120 और यूजर USR-8812 है। कृपया रिफंड करें या एक्टिवेट करें।",
+    category: "Billing/Refund",
+    priority: "P1"
   },
   {
     id: "preset-saas-2",
@@ -774,11 +790,274 @@ function App() {
     return `${h}:${m}:${s}`;
   };
 
+  const downloadTriageReport = () => {
+    if (!triageOutput) return;
+    
+    const ticketId = extractedOrderId || extractedUserId || `INC-${Math.floor(100000 + Math.random() * 900000)}`;
+    const reportHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Triage Incident Report - ${ticketId}</title>
+  <style>
+    body { font-family: 'Segoe UI', Roboto, sans-serif; color: #1e293b; padding: 40px; margin: 0; line-height: 1.6; }
+    .header { display: flex; justify-content: space-between; border-bottom: 2px solid #ef4f5f; padding-bottom: 12px; margin-bottom: 24px; }
+    .logo { font-size: 20px; font-weight: 800; color: #ef4f5f; }
+    .timestamp { font-size: 12px; color: #64748b; }
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+    .badge-p0 { background: #fee2e2; color: #991b1b; }
+    .badge-p1 { background: #fef3c7; color: #92400e; }
+    .badge-p2 { background: #ecfdf5; color: #065f46; }
+    .section-title { font-size: 14px; font-weight: 700; color: #475569; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-top: 24px; margin-bottom: 12px; }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .field-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; }
+    .field-label { font-size: 10px; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
+    .field-val { font-size: 14px; font-weight: 600; }
+    .log-box { background: #0f172a; color: #38bdf8; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 12px; white-space: pre-wrap; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">🚨 ULTIMATE TRIAGE ARCHITECT INCIDENT REPORT</div>
+    <div class="timestamp">Generated: ${new Date().toLocaleString()}</div>
+  </div>
+  
+  <div class="field-grid">
+    <div class="field-card">
+      <div class="field-label">Reference Incident ID</div>
+      <div class="field-val">${ticketId}</div>
+    </div>
+    <div class="field-card">
+      <div class="field-label">Ingested Source Language</div>
+      <div class="field-val">${triageOutput.detectedLang || "English"}</div>
+    </div>
+  </div>
+
+  <div class="field-grid">
+    <div class="field-card">
+      <div class="field-label">Incident Category</div>
+      <div class="field-val">${triageOutput.category}</div>
+    </div>
+    <div class="field-card">
+      <div class="field-label">Priority Taxonomy</div>
+      <div class="field-val">
+        <span class="badge badge-${triageOutput.priority.toLowerCase()}">${triageOutput.priority}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Raw Incident Transcript</div>
+  <div style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; font-style: italic; font-size: 13.5px;">
+    "${lastCustomerText}"
+  </div>
+
+  <div class="section-title">Automated Dispatch Action & Reasoning</div>
+  <div class="field-grid" style="grid-template-columns: 2fr 1fr;">
+    <div class="field-card">
+      <div class="field-label">Triage Resolution Reasoning</div>
+      <div class="field-val" style="font-weight: normal; font-size: 13px;">${triageOutput.why}</div>
+    </div>
+    <div class="field-card">
+      <div class="field-label">Recommended Tool Call</div>
+      <div class="field-val" style="font-family: monospace; font-size: 13px; color: #ef4f5f;">${triageOutput.next_tool ? `${triageOutput.next_tool}()` : 'NONE'}</div>
+    </div>
+  </div>
+
+  <div class="section-title">System Execution Telemetry Trace</div>
+  <div class="log-box">${triageOutput.reasoning_trace || 'No logs recorded'}</div>
+
+  <footer style="margin-top: 40px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 16px;">
+    Decentralized Triage Orchestrator Engine • Confidential Operations Report
+  </footer>
+</body>
+</html>
+    `;
+
+    const blob = new Blob([reportHtml], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Triage_Incident_Report_${ticketId}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const renderAnalyticsView = () => {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', animation: 'fadeIn 0.5s ease', textAlign: 'left', marginTop: '16px' }}>
+        <div className="glass-panel" style={{ padding: '24px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Activity style={{ color: '#6366f1' }} /> System Incident Distribution & Ingestion Analytics
+          </h2>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+            
+            {/* Left side: CSS Bar chart */}
+            <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '20px' }}>
+              <h3 style={{ fontSize: '13px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '16px', letterSpacing: '0.5px' }}>
+                Incident Volume by Category
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {[
+                  { name: "Delayed Delivery / SLA Latency", pct: 38, count: 801, color: '#f59e0b' },
+                  { name: "Billing Discrepancy & Refunds", pct: 25, count: 527, color: '#10b981' },
+                  { name: "Technical Bug / UI Repaints", pct: 18, count: 379, color: '#ef4f5f' },
+                  { name: "Account Lockout & MFA Recovery", pct: 11, count: 232, color: '#6366f1' },
+                  { name: "Wrong Food / Dietary Threat", pct: 8, count: 169, color: '#ec4899' }
+                ].map((item, idx) => (
+                  <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '600' }}>
+                      <span>{item.name}</span>
+                      <span style={{ color: item.color }}>{item.count} ({item.pct}%)</span>
+                    </div>
+                    <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${item.pct}%`, backgroundColor: item.color, borderRadius: '4px' }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right side: CSS Donut Chart */}
+            <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <h3 style={{ fontSize: '13px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '16px', letterSpacing: '0.5px', alignSelf: 'flex-start' }}>
+                Priority Severity Share
+              </h3>
+              
+              {/* Dynamic CSS Donut chart circle */}
+              <div style={{
+                width: '120px',
+                height: '120px',
+                borderRadius: '50%',
+                background: 'conic-gradient(#ef4444 0% 5%, #f59e0b 5% 25%, #10b981 25% 100%)',
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+              }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  background: '#fafafa',
+                  position: 'absolute',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column'
+                }}>
+                  <span style={{ fontSize: '18px', fontWeight: '800' }}>100%</span>
+                  <span style={{ fontSize: '9px', color: '#64748b', textTransform: 'uppercase' }}>Triage Ratio</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', marginTop: '20px', fontSize: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
+                  <span style={{ flexGrow: 1 }}>P0 Critical Alert</span>
+                  <span style={{ fontWeight: '700' }}>5%</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#f59e0b' }} />
+                  <span style={{ flexGrow: 1 }}>P1 Urgent Action</span>
+                  <span style={{ fontWeight: '700' }}>20%</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#10b981' }} />
+                  <span style={{ flexGrow: 1 }}>P2 standard SLA</span>
+                  <span style={{ fontWeight: '700' }}>75%</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Live System Ingest Audit Trail table */}
+        <div className="glass-panel" style={{ padding: '24px' }}>
+          <h2 style={{ fontSize: '15px', fontWeight: '800', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Terminal size={16} style={{ color: '#6366f1' }} /> Real-time Ingestion Audit Log (Active Pipeline)
+          </h2>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+            <thead>
+              <tr style={{ borderBottom: '2px solid #e2e8f0', textAlign: 'left', color: 'var(--text-muted)' }}>
+                <th style={{ padding: '8px' }}>Ticket ID</th>
+                <th style={{ padding: '8px' }}>Ingestion Channel</th>
+                <th style={{ padding: '8px' }}>Language</th>
+                <th style={{ padding: '8px' }}>Mapped Category</th>
+                <th style={{ padding: '8px' }}>Priority</th>
+                <th style={{ padding: '8px' }}>Action Dispatch Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { id: "INC-99120", channel: "API Webhook", lang: "Hindi", cat: "Billing/Refund", pri: "P1", status: "Void dispatched", state: 'success' },
+                { id: "INC-88912", channel: "Zomato Chat", lang: "English", cat: "Wrong/Dietary Issue", pri: "P0", status: "Escalated to Supervisor", state: 'p0' },
+                { id: "INC-77112", channel: "Customer Voice", lang: "Gujarati", cat: "Delayed Delivery", pri: "P1", status: "Rider Status Fetched", state: 'p1' },
+                { id: "INC-4021", channel: "SaaS App Panel", lang: "English", cat: "Technical Bug", pri: "P2", status: "Stack trace checked", state: 'p2' },
+                { id: "INC-3321", channel: "Admin Sandbox", lang: "English", cat: "Account Access", pri: "P0", status: "IP Blocked (Cloudflare)", state: 'danger' }
+              ].map((row, idx) => (
+                <tr key={idx} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                  <td style={{ padding: '10px 8px', fontWeight: '700', fontFamily: 'monospace' }}>{row.id}</td>
+                  <td style={{ padding: '10px 8px' }}>{row.channel}</td>
+                  <td style={{ padding: '10px 8px' }}>
+                    <span style={{ 
+                      backgroundColor: row.lang !== 'English' ? '#eef2ff' : '#f1f5f9', 
+                      color: row.lang !== 'English' ? '#4f46e5' : '#475569', 
+                      padding: '2px 6px', 
+                      borderRadius: '4px',
+                      fontSize: '11px',
+                      fontWeight: '600'
+                    }}>{row.lang}</span>
+                  </td>
+                  <td style={{ padding: '10px 8px' }}>{row.cat}</td>
+                  <td style={{ padding: '10px 8px' }}>
+                    <span className={`badge ${
+                      row.pri === 'P0' ? 'badge-p0' : row.pri === 'P1' ? 'badge-p1' : 'badge-p2'
+                    }`} style={{ fontSize: '10px', padding: '2px 6px' }}>{row.pri}</span>
+                  </td>
+                  <td style={{ padding: '10px 8px', fontWeight: '600', color: row.state === 'danger' ? '#ef4444' : row.state === 'success' ? '#10b981' : 'var(--text-main)' }}>
+                    {row.status}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  };
+
   const currentPresets = agentProfile === 'saas' ? SAAS_PRESETS : ZOMATO_PRESETS;
   const activeSentiment = getSentiment(lastCustomerText);
 
   return (
     <div className="app-container">
+      <style>{`
+        @keyframes radar-rotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes ping {
+          0% { transform: scale(1); opacity: 1; }
+          100% { transform: scale(2.8); opacity: 0; }
+        }
+        @keyframes status-pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.3; transform: scale(0.95); }
+        }
+        @keyframes glow-pulse {
+          0%, 100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+          50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.7); }
+        }
+        .stat-card:hover {
+          transform: translateY(-4px) scale(1.02);
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+      `}</style>
       {/* 3D Parallax Background elements */}
       <div className="parallax-bg">
         <div 
@@ -817,16 +1096,18 @@ function App() {
       {/* Header bar */}
       <header className="app-header">
         <div className="logo-section">
-          <div className="logo-badge" style={{ backgroundColor: agentProfile === 'saas' ? '#10b981' : '#ef4f5f' }}>
-            {agentProfile === 'saas' ? 'U' : 'Z'}
+          <div className="logo-badge" style={{ backgroundColor: agentProfile === 'saas' ? '#10b981' : agentProfile === 'analytics' ? '#6366f1' : '#ef4f5f' }}>
+            {agentProfile === 'saas' ? 'U' : agentProfile === 'analytics' ? 'A' : 'Z'}
           </div>
           <div className="logo-text">
             <h1 className="dashboard-title-glow">
-              {agentProfile === 'saas' ? 'Ultimate Triage Architect Portal' : 'Zomato AI Support Triage'}
+              {agentProfile === 'saas' ? 'Ultimate Triage Architect Portal' : agentProfile === 'analytics' ? 'System Operations Analytics' : 'Zomato AI Support Triage'}
             </h1>
             <p>
               {agentProfile === 'saas' 
                 ? 'High-Throughput Autonomous SaaS Classification Console' 
+                : agentProfile === 'analytics'
+                ? 'Real-Time Ingestion Channels & Service Level Performance'
                 : 'Lead AI Support Triage Agent Portal (3D Console)'}
             </p>
           </div>
@@ -874,11 +1155,83 @@ function App() {
             >
               🛡️ SaaS Platform Triage
             </button>
+            <button
+              onClick={() => toggleProfile('analytics')}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '8px',
+                border: 'none',
+                fontSize: '12px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                background: agentProfile === 'analytics' ? '#6366f1' : 'transparent',
+                color: agentProfile === 'analytics' ? 'white' : '#64748b',
+                transition: 'all 0.2s'
+              }}
+            >
+              📊 Ops Analytics
+            </button>
           </div>
 
-          <div className="badge badge-neutral" style={{ fontSize: '12px', padding: '6px 12px', background: 'white' }}>
-            <Cpu size={14} style={{ marginRight: '4px', color: agentProfile === 'saas' ? '#10b981' : '#ef4f5f' }} />
-            Gemini 3.5 Connected
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <div className="badge badge-neutral" style={{ 
+              fontSize: '11px', 
+              padding: '5px 10px', 
+              background: '#f8fafc',
+              border: '1px solid #cbd5e1',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              color: '#475569',
+              borderRadius: '6px'
+            }}>
+              <span style={{ 
+                width: '6px', 
+                height: '6px', 
+                backgroundColor: '#10b981', 
+                borderRadius: '50%', 
+                display: 'inline-block',
+                animation: 'status-pulse 1.8s infinite'
+              }} />
+              <span>WAF Shield: Secure</span>
+            </div>
+            
+            <div className="badge badge-neutral" style={{ 
+              fontSize: '11px', 
+              padding: '5px 10px', 
+              background: '#f8fafc',
+              border: '1px solid #cbd5e1',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              color: '#475569',
+              borderRadius: '6px'
+            }}>
+              <span style={{ 
+                width: '6px', 
+                height: '6px', 
+                backgroundColor: '#10b981', 
+                borderRadius: '50%', 
+                display: 'inline-block',
+                animation: 'status-pulse 1.8s infinite'
+              }} />
+              <span>NLP Translate: Active</span>
+            </div>
+
+            <div className="badge badge-neutral" style={{ 
+              fontSize: '11px', 
+              padding: '5px 10px', 
+              background: '#f8fafc',
+              border: '1px solid #cbd5e1',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              color: '#475569',
+              borderRadius: '6px'
+            }}>
+              <Cpu size={12} style={{ color: agentProfile === 'saas' ? '#10b981' : agentProfile === 'analytics' ? '#6366f1' : '#ef4f5f' }} />
+              <span>AI Core: Connected</span>
+            </div>
           </div>
         </div>
       </header>
@@ -920,14 +1273,16 @@ function App() {
             <Coins size={22} />
           </div>
           <div className="stat-info">
-            <h3>{agentProfile === 'saas' ? 'Refunded / Credited' : 'Total Refunded'}</h3>
-            <p>{agentProfile === 'saas' ? `$${(stats.refunds / 80).toFixed(0)}` : `₹${stats.refunds.toLocaleString()}`}</p>
+            <h3>{agentProfile === 'saas' ? 'Refunded / Credited' : agentProfile === 'analytics' ? 'Cumulative Ops' : 'Total Refunded'}</h3>
+            <p>{agentProfile === 'saas' ? `$${(stats.refunds / 80).toFixed(0)}` : agentProfile === 'analytics' ? `$${(stats.refunds / 80).toFixed(0)} / ₹${stats.refunds.toLocaleString()}` : `₹${stats.refunds.toLocaleString()}`}</p>
           </div>
         </div>
       </section>
 
-      {/* Preset Scenarios Selector */}
-      <section style={{ textAlign: 'left' }}>
+      {agentProfile !== 'analytics' ? (
+        <>
+          {/* Preset Scenarios Selector */}
+          <section style={{ textAlign: 'left' }}>
         <h2 className="section-title">
           <Sparkles size={18} style={{ color: agentProfile === 'saas' ? '#10b981' : '#ef4f5f' }} />
           Select a Test Complaint Scenario ({agentProfile === 'saas' ? 'Platform Triage' : 'Food Support'})
@@ -1248,6 +1603,21 @@ function App() {
             >
               <RotateCcw size={16} /> Reset
             </button>
+            {triageOutput && (
+              <button 
+                className="btn-3d btn-3d-secondary"
+                onClick={downloadTriageReport}
+                style={{
+                  background: '#f1f5f9',
+                  color: '#334155',
+                  boxShadow: 'none',
+                  border: '1px solid #cbd5e1',
+                  marginRight: 'auto'
+                }}
+              >
+                📄 Export Report
+              </button>
+            )}
             <button 
               className="btn-3d" 
               onClick={handleTriage}
@@ -1332,6 +1702,27 @@ function App() {
           ) : triageOutput ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', height: '100%' }}>
               
+              {triageOutput.detectedLang && (
+                <div style={{
+                  padding: '10px 14px',
+                  backgroundColor: '#f0fdf4',
+                  border: '1px solid #bbf7d0',
+                  borderRadius: '8px',
+                  fontSize: '12.5px',
+                  color: '#166534',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '8px',
+                  lineHeight: '1.4'
+                }}>
+                  <Globe size={16} style={{ color: '#166534', flexShrink: 0, marginTop: '2px' }} />
+                  <div>
+                    <strong>Auto-Translated from {triageOutput.detectedLang}:</strong>
+                    <div style={{ fontStyle: 'italic', marginTop: '2px', color: '#14532d' }}>"{triageOutput.translatedText}"</div>
+                  </div>
+                </div>
+              )}
+
               {/* Classification Cards */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div style={{ 
@@ -1365,22 +1756,151 @@ function App() {
               </div>
 
 
-              {/* 5. Telemetry Live Logs Console */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: '700', color: '#64748b' }}>
-                  <Terminal size={12} />
-                  <span>AGENT PROCESSING TELEMETRY</span>
+              {/* 5. Visual AI Processing Pipeline Monitor */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  <Cpu size={13} style={{ color: 'var(--primary)' }} />
+                  <span>AI Agent Pipeline Monitor</span>
                 </div>
-                <div className="telemetry-logs-terminal">
-                  {telemetryLogs.map((log, idx) => (
-                    <div key={idx} className="telemetry-line">{log}</div>
-                  ))}
-                  {isAnalyzing && (
-                    <div className="telemetry-line" style={{ color: '#fb923c' }}>[PROCESSING] Analysing text tokens...</div>
-                  )}
-                  {telemetryLogs.length === 0 && !isAnalyzing && (
-                    <div className="telemetry-line" style={{ color: '#64748b' }}>No telemetry trace logs generated. Click Process AI Triage.</div>
-                  )}
+                
+                <div style={{ 
+                  background: '#f8fafc', 
+                  border: '1px solid #e2e8f0', 
+                  borderRadius: '10px', 
+                  padding: '16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '14px'
+                }}>
+                  {/* Step 1: Ingestion & Extraction */}
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+                      <div style={{ 
+                        width: '20px', 
+                        height: '20px', 
+                        borderRadius: '50%', 
+                        backgroundColor: triageOutput ? '#10b981' : isAnalyzing ? '#3b82f6' : '#e2e8f0', 
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '11px',
+                        fontWeight: 'bold'
+                      }}>
+                        {triageOutput ? "✓" : "1"}
+                      </div>
+                      <div style={{ width: '2px', flexGrow: 1, backgroundColor: '#e2e8f0', minHeight: '12px', marginTop: '4px' }} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '12.5px', fontWeight: '700', color: '#334155', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span>Ingestion & Data Extraction</span>
+                        {isAnalyzing && !triageOutput && (
+                          <span style={{ fontSize: '10px', color: '#3b82f6', background: '#dbeafe', padding: '1px 6px', borderRadius: '10px', fontWeight: 'normal' }}>Processing...</span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
+                        {triageOutput 
+                          ? `Identified target entities: User ID (${triageOutput.extractedIds?.userId || 'None'}), Invoice (${triageOutput.extractedIds?.invoiceId || 'None'})`
+                          : isAnalyzing 
+                          ? "Scanning text parameters and customer metadata..." 
+                          : "Awaiting incident analysis launch."
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 2: Guardrail Verification */}
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+                      <div style={{ 
+                        width: '20px', 
+                        height: '20px', 
+                        borderRadius: '50%', 
+                        backgroundColor: triageOutput ? '#10b981' : isAnalyzing ? '#3b82f6' : '#e2e8f0', 
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '11px',
+                        fontWeight: 'bold'
+                      }}>
+                        {triageOutput ? "✓" : "2"}
+                      </div>
+                      <div style={{ width: '2px', flexGrow: 1, backgroundColor: '#e2e8f0', minHeight: '12px', marginTop: '4px' }} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '12.5px', fontWeight: '700', color: '#334155' }}>Security Threat Inspection</div>
+                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
+                        {triageOutput 
+                          ? "System safety check complete. No critical injection threats detected."
+                          : isAnalyzing 
+                          ? "Running SQL injection validations & threat signatures..." 
+                          : "Shield ready."
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 3: Categorization & Priority Routing */}
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+                      <div style={{ 
+                        width: '20px', 
+                        height: '20px', 
+                        borderRadius: '50%', 
+                        backgroundColor: triageOutput ? '#10b981' : '#e2e8f0', 
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '11px',
+                        fontWeight: 'bold'
+                      }}>
+                        {triageOutput ? "✓" : "3"}
+                      </div>
+                      <div style={{ width: '2px', flexGrow: 1, backgroundColor: '#e2e8f0', minHeight: '12px', marginTop: '4px' }} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '12.5px', fontWeight: '700', color: '#334155' }}>AI Logic Classification</div>
+                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
+                        {triageOutput 
+                          ? `Triaged as [${triageOutput.category}] with severity [${triageOutput.priority}]` 
+                          : "Determining priority tier."
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 4: Recommended Integration Dispatch */}
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <div style={{ 
+                        width: '20px', 
+                        height: '20px', 
+                        borderRadius: '50%', 
+                        backgroundColor: toolResult ? '#10b981' : triageOutput ? '#f59e0b' : '#e2e8f0', 
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '11px',
+                        fontWeight: 'bold'
+                      }}>
+                        {toolResult ? "✓" : "4"}
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '12.5px', fontWeight: '700', color: '#334155' }}>Integration API Dispatch</div>
+                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
+                        {toolResult 
+                          ? `Successfully executed recommended action API [${activeToolName}]`
+                          : triageOutput 
+                          ? "Pending operator manual command confirmation."
+                          : "Awaiting execution trigger."
+                        }
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -1668,19 +2188,30 @@ function App() {
                           </div>
                         </div>
 
-                        {/* Interactive Server Logs Terminal */}
-                        <div className="terminal-container" style={{ minHeight: '150px' }}>
-                          <div className="terminal-header" style={{ padding: '6px 12px' }}>
-                            <div className="terminal-title">server_stack_trace.log</div>
-                          </div>
-                          <div className="terminal-body" style={{ padding: '10px', fontSize: '11px', lineHeight: '1.4' }}>
+                        {/* Interactive Server Logs Monitor */}
+                        <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                          <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>
+                            System Diagnostics Log Monitor
+                          </h4>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             {toolResult.log_history.map((log, idx) => (
-                              <div key={idx} style={{ 
-                                color: log.level === 'FATAL' || log.level === 'ERROR' ? '#f43f5e' : '#10b981',
-                                marginBottom: '4px',
-                                fontFamily: 'monospace'
-                              }}>
-                                [{log.timestamp}] {log.level}: {log.message}
+                              <div key={idx} style={{ display: 'flex', gap: '10px', fontSize: '12.5px', alignItems: 'flex-start' }}>
+                                <span style={{ 
+                                  color: log.level === 'FATAL' || log.level === 'ERROR' ? '#ef4444' : '#10b981',
+                                  fontWeight: 'bold',
+                                  fontSize: '11px',
+                                  padding: '2px 6px',
+                                  background: log.level === 'FATAL' || log.level === 'ERROR' ? '#fee2e2' : '#ecfdf5',
+                                  borderRadius: '4px',
+                                  minWidth: '55px',
+                                  textAlign: 'center'
+                                }}>
+                                  {log.level}
+                                </span>
+                                <div style={{ flexGrow: 1 }}>
+                                  <div style={{ fontWeight: '600' }}>{log.message}</div>
+                                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>{log.timestamp}</div>
+                                </div>
                               </div>
                             ))}
                           </div>
@@ -1786,34 +2317,148 @@ function App() {
                     </div>
                   )}
 
-                  {/* ==================== human_in_the_loop_escalation ==================== */}
+                  {/* ==================== human_in_the_loop_escalation / SecOps Threat Sandbox ==================== */}
                   {activeToolName === "human_in_the_loop_escalation" && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#fff5f5', padding: '16px', borderRadius: '12px', border: '1px solid #feb2b2' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#dc2626' }}>
-                            <AlertOctagon size={18} />
-                            <h4 style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>SecOps Intrusion Alert</h4>
-                          </div>
-                          <div style={{ fontSize: '13px', marginTop: '6px' }}>ID: <strong>{toolResult.incident_id}</strong></div>
-                          <div style={{ fontSize: '12px', color: '#9b2c2c', fontWeight: '600' }}>Threat Class: {toolResult.threat_level}</div>
-                          <hr style={{ border: 'none', borderTop: '1px solid #feb2b2', margin: '8px 0' }} />
-                          <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Origin IP: <strong style={{ color: 'black' }}>{toolResult.attacker_origin.ip}</strong></div>
-                          <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Location: <strong>{toolResult.attacker_origin.geolocation}</strong></div>
-                        </div>
+                      {toolResult.threat_level === "CRITICAL_THREAT" ? (
+                        <>
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#fff5f5', padding: '16px', borderRadius: '12px', border: '1px solid #feb2b2' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#dc2626' }}>
+                                <ShieldAlert size={18} />
+                                <h4 style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>SecOps Threat Guard</h4>
+                              </div>
+                              <div style={{ fontSize: '13px', marginTop: '6px' }}>Incident: <strong>{toolResult.incident_id}</strong></div>
+                              <div style={{ fontSize: '12px', color: '#9b2c2c', fontWeight: '600' }}>Type: SQLi / Admin Exploit</div>
+                              <hr style={{ border: 'none', borderTop: '1px solid #feb2b2', margin: '8px 0' }} />
+                              <div style={{ fontSize: '12px', display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: 'var(--text-muted)' }}>Attacker IP:</span>
+                                <span style={{ fontWeight: '700', color: '#b91c1c' }}>{toolResult.attacker_origin.ip}</span>
+                              </div>
+                              <div style={{ fontSize: '12px', display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: 'var(--text-muted)' }}>Location:</span>
+                                <span style={{ fontWeight: '600' }}>Beijing, CN</span>
+                              </div>
+                            </div>
 
-                        {/* Incident Payload */}
-                        <div style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '12px', padding: '16px', color: 'white' }}>
-                          <h4 style={{ fontSize: '12px', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px' }}>Intercepted Payload log</h4>
-                          <pre style={{ margin: 0, fontSize: '12px', fontFamily: 'monospace', color: '#f43f5e', whiteSpace: 'pre-wrap' }}>
-                            {toolResult.target_payload}
-                          </pre>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '11px', color: '#94a3b8' }}>
-                            <Globe size={14} />
-                            <span>ISP Node: {toolResult.attacker_origin.network_isp}</span>
+                            {/* Visual SecOps World Map */}
+                            <div className="map-canvas-container" style={{ backgroundColor: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                              <div className="map-grid-overlay" style={{ opacity: 0.1 }}></div>
+                              
+                              {/* Glowing Cyber Radar Scanner Sweep Overlay */}
+                              <div style={{
+                                position: 'absolute',
+                                width: '160px',
+                                height: '160px',
+                                borderRadius: '50%',
+                                border: '1px solid rgba(239, 68, 68, 0.25)',
+                                background: 'conic-gradient(from 0deg, transparent 40%, rgba(239, 68, 68, 0.15) 100%)',
+                                animation: 'radar-rotate 5s linear infinite',
+                                pointerEvents: 'none',
+                                left: 'calc(72% - 80px)',
+                                top: 'calc(40% - 80px)',
+                                zIndex: 1
+                              }} />
+                              
+                              <svg viewBox="0 0 400 200" style={{ width: '100%', height: '100%', opacity: 0.25 }}>
+                                <path d="M 40 40 Q 80 40, 100 60 T 140 100 T 100 150 Z" fill="#64748b" />
+                                <path d="M 220 50 Q 280 40, 320 80 T 360 120 T 300 160 Z" fill="#64748b" />
+                                <path d="M 180 80 Q 200 100, 220 120 T 200 160 Z" fill="#64748b" />
+                              </svg>
+                              <div style={{ position: 'absolute', top: '40%', left: '72%', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2 }}>
+                                <div style={{ 
+                                  width: '12px', 
+                                  height: '12px', 
+                                  backgroundColor: '#ef4444', 
+                                  borderRadius: '50%', 
+                                  border: '2px solid white', 
+                                  animation: 'ping 1.2s infinite' 
+                                }} />
+                                <span style={{ 
+                                  background: '#ef4444', 
+                                  color: 'white', 
+                                  padding: '2px 6px', 
+                                  borderRadius: '4px', 
+                                  fontSize: '9px', 
+                                  fontWeight: 'bold', 
+                                  marginTop: '4px',
+                                  whiteSpace: 'nowrap'
+                                }}>
+                                  🚨 Origin: Beijing, CN
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Telemetry defenses block */}
+                          <div style={{
+                            background: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '8px',
+                            padding: '12px 18px',
+                            textAlign: 'left'
+                          }}>
+                            <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '8px' }}>
+                              Automatic Sandbox Threat Defenses
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', fontSize: '12px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#16a34a' }}>
+                                <CheckCircle size={14} /> WAF Block Triggered
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#16a34a' }}>
+                                <CheckCircle size={14} /> Payload Neutralized
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#2563eb' }}>
+                                <Activity size={14} style={{ animation: 'pulse 1.5s infinite' }} /> Isolating Credentials...
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#fff5f5', padding: '16px', borderRadius: '12px', border: '1px solid #feb2b2' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#dc2626' }}>
+                              <AlertOctagon size={18} />
+                              <h4 style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>SecOps Intrusion Alert</h4>
+                            </div>
+                            <div style={{ fontSize: '13px', marginTop: '6px' }}>ID: <strong>{toolResult.incident_id}</strong></div>
+                            <div style={{ fontSize: '12px', color: '#9b2c2c', fontWeight: '600' }}>Threat Class: {toolResult.threat_level}</div>
+                            <hr style={{ border: 'none', borderTop: '1px solid #feb2b2', margin: '8px 0' }} />
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Origin IP: <strong style={{ color: 'black' }}>{toolResult.attacker_origin.ip}</strong></div>
+                            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Location: <strong>{toolResult.attacker_origin.geolocation}</strong></div>
+                          </div>
+
+                          {/* Automated Security Guardrails Audit Panel */}
+                          <div style={{ background: '#fafafa', border: '1px dashed #cbd5e1', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <h4 style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', margin: 0 }}>
+                              Automated Guardrails Check
+                            </h4>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12.5px' }}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#475569' }}>
+                                  <Shield size={15} style={{ color: '#10b981' }} /> SQL Injection Guardrail
+                                </span>
+                                <span style={{ fontWeight: '700', color: '#10b981' }}>PASSED ✓</span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12.5px' }}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#475569' }}>
+                                  <Shield size={15} style={{ color: '#10b981' }} /> Command Injection Guardrail
+                                </span>
+                                <span style={{ fontWeight: '700', color: '#10b981' }}>PASSED ✓</span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12.5px' }}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#475569' }}>
+                                  <ShieldAlert size={15} style={{ color: '#f59e0b' }} /> Routing Override Escalation
+                                </span>
+                                <span style={{ fontWeight: '700', color: '#f59e0b' }}>TRIGGERED ⚡</span>
+                              </div>
+                            </div>
+                            <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', margin: 0, borderTop: '1px solid #e2e8f0', paddingTop: '8px', marginTop: '4px' }}>
+                              Compliance Override Rule <strong>SEC-390</strong> deployed. Routing incident to human supervisor.
+                            </p>
                           </div>
                         </div>
-                      </div>
+                      )}
 
                       {actionStatus !== "threat_locked" && (
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#ffebeb', padding: '12px 18px', borderRadius: '8px', border: '1px solid #fecaca' }}>
@@ -1946,6 +2591,8 @@ function App() {
           </div>
         </section>
       )}
+        </>
+      ) : renderAnalyticsView()}
 
       {/* Guardrail logic details */}
       <footer style={{ marginTop: '40px', borderTop: '1px solid var(--border-card)', paddingTop: '20px', color: 'var(--text-muted)', fontSize: '12px', textAlign: 'center' }}>
